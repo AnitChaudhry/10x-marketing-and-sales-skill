@@ -1,0 +1,82 @@
+/* 100X Outreach Canvas Styles */
+
+:root {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: #0f172a;
+}
+
+/* TLDraw overrides for dark theme - N8N Style */
+/* Background is now handled by DottedGrid component */
+.tl-background {
+  background-color: transparent !important;
+}
+
+.tl-canvas {
+  background-color: transparent !important;
+}
+
+/* Ensure the canvas container has the dark background */
+.tl-container {
+  background-color: #1a1a2e !important;
+}
+
+/* Selection highlight */
+.tl-selection__fg {
+  stroke: #6366f1 !important;
+}
+
+.tl-selection__bg {
+  fill: rgba(99, 102, 241, 0.1) !important;
+}
+
+/* Zoom controls styling */
+.tl-zoom-menu, .tl-navigation-zone {
+  background: #1e1e2e !important;
+  border-radius: 8px !important;
+  border: 1px solid #334155 !important;
+}
+
+/* Hide TLDraw default toolbar items we don't need */
+.tl-menu-zone,
+.tl-styles-panel,
+.tl-page-menu,
+.tl-help-menu,
+.tl-actions-menu {
+  display: none !important;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1e1e2e;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* Button hover effects */
+button:hover {
+  opacity: 0.9;
+}
+
+button:active {
+  transform: scale(0.98);
+}

@@ -1,0 +1,195 @@
+# =============================================================================
+# B2B PROFESSIONAL OUTREACH WORKFLOW
+# =============================================================================
+# Target: Business professionals, decision makers, potential clients
+# Duration: 14 days
+# Platforms: LinkedIn (primary) + Email (secondary)
+# Touch limit: 8 max per person
+# =============================================================================
+
+name: "B2B Professional Outreach"
+description: "Professional multi-touch sequence for B2B prospects"
+version: "1.0"
+
+# Target criteria
+target_type: "person"  # person | brand | influencer | executive
+target_criteria:
+  roles: ["CEO", "CTO", "VP", "Director", "Head of", "Manager"]
+  industries: []  # Specify or leave empty for all
+  company_size: "10-1000"  # Employee count range
+
+# Workflow rules
+rules:
+  max_touches_per_person: 8
+  max_touches_per_day: 2
+  respect_timezone: true
+  active_hours_only: true
+  weekdays_only: true
+  stop_on_response: true
+  cool_off_days: 7  # Days to wait after no response before follow-up
+
+# =============================================================================
+# PHASE 1: WARM-UP (Day 1)
+# Build familiarity before direct outreach
+# =============================================================================
+phases:
+  - name: "warm_up"
+    day: 1
+    description: "Build familiarity through passive engagement"
+    steps:
+      - action: "view_profile"
+        platform: "linkedin"
+        delay_before: "0"
+        purpose: "Trigger 'viewed your profile' notification"
+        notes: "They see you looked at their profile"
+
+      - action: "like_post"
+        platform: "linkedin"
+        delay_before: "2-4 hours"
+        target: "most_recent_post"
+        condition: "has_posts_in_30_days"
+        purpose: "Show genuine interest in their content"
+        notes: "Only like if they have recent activity"
+
+# =============================================================================
+# PHASE 2: CONNECT (Day 2)
+# Send personalized connection request
+# =============================================================================
+  - name: "connect"
+    day: 2
+    description: "Send connection request with personalized note"
+    steps:
+      - action: "connect"
+        platform: "linkedin"
+        delay_before: "0"
+        template: "linkedin/connection-requests/cold_outreach"
+        template_vars:
+          reference_type: "content_or_company"  # Reference their content or company
+        purpose: "Establish connection"
+        notes: "Personalize based on their recent activity"
+
+# =============================================================================
+# PHASE 3: FIRST MESSAGE (Day 3-4)
+# Message ONLY if connection accepted
+# =============================================================================
+  - name: "first_message"
+    day: 3
+    description: "Send value-first message after connection"
+    conditions:
+      - "connection_accepted"
+    wait_for_condition: "48 hours"  # Wait up to 48h for acceptance
+    skip_if_not_met: true  # Skip to email if not connected
+    steps:
+      - action: "message"
+        platform: "linkedin"
+        delay_before: "24 hours"  # Wait 24h after acceptance
+        template: "linkedin/messages/intro_after_connect"
+        template_vars:
+          tone: "helpful"
+          include_value: true
+          cta_type: "soft"  # "Would love to hear your thoughts"
+        purpose: "Start conversation with value"
+        notes: "NO SELLING in first message - pure relationship building"
+
+# =============================================================================
+# PHASE 4: EMAIL OUTREACH (Day 5)
+# Parallel channel if we have their email
+# =============================================================================
+  - name: "email_intro"
+    day: 5
+    description: "Email introduction if no LinkedIn response"
+    conditions:
+      - "has_email"
+      - "no_linkedin_response"
+    steps:
+      - action: "send"
+        platform: "email"
+        template: "email/outreach/warm_intro"
+        template_vars:
+          reference_linkedin: true
+          tone: "professional"
+        purpose: "Alternative channel touchpoint"
+        notes: "Reference LinkedIn connection attempt"
+
+# =============================================================================
+# PHASE 5: LINKEDIN FOLLOW-UP (Day 8)
+# Gentle follow-up with new value
+# =============================================================================
+  - name: "linkedin_followup"
+    day: 8
+    description: "Follow up on LinkedIn with additional value"
+    conditions:
+      - "connection_accepted"
+      - "no_response"
+    steps:
+      - action: "message"
+        platform: "linkedin"
+        template: "linkedin/messages/follow_up_no_response"
+        template_vars:
+          add_new_value: true
+          reference_previous: true
+        purpose: "Re-engage with new value"
+        notes: "Share useful resource or insight"
+
+# =============================================================================
+# PHASE 6: EMAIL FOLLOW-UP (Day 12)
+# Final follow-up attempt
+# =============================================================================
+  - name: "email_followup"
+    day: 12
+    description: "Final email follow-up"
+    conditions:
+      - "has_email"
+      - "no_response"
+    steps:
+      - action: "send"
+        platform: "email"
+        template: "email/follow-up/no_response_final"
+        template_vars:
+          tone: "understanding"
+          offer_future_contact: true
+        purpose: "Final professional follow-up"
+        notes: "Keep door open for future"
+
+# =============================================================================
+# COMPLETION
+# =============================================================================
+completion:
+  on_response:
+    action: "pause_and_notify"
+    message: "Response received! Review and continue manually."
+
+  on_no_response:
+    action: "mark_cold"
+    cool_off_period: "90 days"
+    message: "No response after full sequence. Marked for future re-engagement."
+
+  on_connection_declined:
+    action: "stop"
+    message: "Connection declined. Removing from sequence."
+
+# =============================================================================
+# SCHEDULE
+# =============================================================================
+schedule:
+  days: ["tuesday", "wednesday", "thursday"]
+  hours:
+    start: "09:00"
+    end: "17:00"
+  timezone: "target"  # Use target's timezone
+
+# =============================================================================
+# EXPECTED TIMELINE
+# =============================================================================
+#
+# Day 1:  View profile + Like post (warm-up)
+# Day 2:  Send connection request
+# Day 3-4: Wait for connection acceptance
+# Day 3:  Message (if accepted within 24h)
+# Day 5:  Email intro (if have email, no LinkedIn response)
+# Day 8:  LinkedIn follow-up (if connected, no response)
+# Day 12: Email follow-up (final)
+# Day 14: Sequence complete
+#
+# Total touches: 5-7 depending on responses
+# =============================================================================

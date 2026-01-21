@@ -1,0 +1,13 @@
+---
+subject: Connecting with fellow professionals
+---
+Hi {{ first_name }},
+
+I noticed we're both in the {{ industry }} space and thought it would be great to connect.
+
+{{ custom_message }}
+
+I'm always looking to expand my network and learn from others in our field. Would you be interested in a virtual coffee chat sometime?
+
+Best regards,
+{{ my_name }}

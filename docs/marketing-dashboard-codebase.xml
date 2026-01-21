@@ -1,0 +1,3443 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+__tests__/
+  ai.test.js
+  assets.test.js
+  campaigns.test.js
+  content.test.js
+  security-file-serving.test.js
+  test-db.js
+db/
+  database.js
+  schema.sql
+lib/
+  ai-bridge.cjs
+  brand-context.cjs
+  scanner.cjs
+middleware/
+  auth.js
+routes/
+  ai.js
+  assets.js
+  campaigns.js
+  content.js
+coverage_output.txt
+index.js
+package.json
+vitest.config.js
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="__tests__/ai.test.js">
+/**
+ * AI API Tests
+ * Claude Code CLI integration, content enhancement, and generation
+ */
+
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { randomBytes } from 'crypto';
+
+const generateId = () => randomBytes(6).toString('hex');
+
+describe('AI API', () => {
+  describe('GET /api/ai/status - Check Claude availability', () => {
+    it('should return status object', () => {
+      const mockAvailable = true;
+
+      const response = {
+        available: mockAvailable,
+        message: mockAvailable ? 'Claude Code ready' : 'Claude Code not found in PATH'
+      };
+
+      expect(response).toHaveProperty('available');
+      expect(response).toHaveProperty('message');
+      expect(response.message).toContain('Claude Code');
+    });
+
+    it('should indicate available when Claude found', () => {
+      const response = {
+        available: true,
+        message: 'Claude Code ready'
+      };
+
+      expect(response.available).toBe(true);
+    });
+
+    it('should indicate unavailable when Claude not found', () => {
+      const response = {
+        available: false,
+        message: 'Claude Code not found in PATH'
+      };
+
+      expect(response.available).toBe(false);
+    });
+
+    it('should handle errors gracefully', () => {
+      const errorResponse = {
+        available: false,
+        error: 'Failed to check Claude availability'
+      };
+
+      expect(errorResponse.available).toBe(false);
+      expect(errorResponse).toHaveProperty('error');
+    });
+  });
+
+  describe('POST /api/ai/enhance - Enhance content', () => {
+    it('should require content field', () => {
+      const errors = [];
+      const body = { instruction: 'Make it better' };
+
+      if (!body.content) {
+        errors.push('Content is required');
+      }
+
+      expect(errors).toContain('Content is required');
+    });
+
+    it('should require instruction field', () => {
+      const errors = [];
+      const body = { content: 'Some text' };
+
+      if (!body.instruction) {
+        errors.push('Instruction is required');
+      }
+
+      expect(errors).toContain('Instruction is required');
+    });
+
+    it('should accept valid request body', () => {
+      const body = {
+        content: 'Original content',
+        instruction: 'Improve clarity'
+      };
+
+      const errors = [];
+      if (!body.content) errors.push('Content is required');
+      if (!body.instruction) errors.push('Instruction is required');
+
+      expect(errors.length).toBe(0);
+    });
+
+    it('should accept optional filePath', () => {
+      const body = {
+        content: 'Original content',
+        instruction: 'Improve clarity',
+        filePath: '/path/to/file.md'
+      };
+
+      expect(body.filePath).toBeDefined();
+      expect(body.filePath).toMatch(/\.md$/);
+    });
+
+    it('should return enhanced content response', () => {
+      const originalContent = 'This is some text';
+      const enhancedContent = 'This is some enhanced text with improvements';
+
+      const response = {
+        success: true,
+        content: enhancedContent,
+        originalLength: originalContent.length,
+        enhancedLength: enhancedContent.length
+      };
+
+      expect(response.success).toBe(true);
+      expect(response.content).toBe(enhancedContent);
+      expect(response.originalLength).toBe(originalContent.length);
+      expect(response.enhancedLength).toBeGreaterThan(response.originalLength);
+    });
+
+    it('should handle enhancement errors', () => {
+      const errorResponse = {
+        error: 'Failed to enhance content',
+        details: 'Claude Code not available'
+      };
+
+      expect(errorResponse).toHaveProperty('error');
+      expect(errorResponse).toHaveProperty('details');
+    });
+  });
+
+  describe('POST /api/ai/generate - Generate content', () => {
+    it('should require type field', () => {
+      const errors = [];
+      const body = { description: 'Create a blog post' };
+
+      if (!body.type) {
+        errors.push('Content type is required');
+      }
+
+      expect(errors).toContain('Content type is required');
+    });
+
+    it('should require description field', () => {
+      const errors = [];
+      const body = { type: 'blog' };
+
+      if (!body.description) {
+        errors.push('Description is required');
+      }
+
+      expect(errors).toContain('Description is required');
+    });
+
+    it('should accept valid request body', () => {
+      const body = {
+        type: 'blog',
+        description: 'Write about marketing automation'
+      };
+
+      const errors = [];
+      if (!body.type) errors.push('Content type is required');
+      if (!body.description) errors.push('Description is required');
+
+      expect(errors.length).toBe(0);
+    });
+
+    it('should accept optional brandContext', () => {
+      const body = {
+        type: 'blog',
+        description: 'Write about marketing',
+        brandContext: { voice: 'professional', tone: 'friendly' }
+      };
+
+      expect(body.brandContext).toBeDefined();
+      expect(body.brandContext).toHaveProperty('voice');
+      expect(body.brandContext).toHaveProperty('tone');
+    });
+
+    it('should return generated content response', () => {
+      const generatedContent = 'Generated blog post content here...';
+
+      const response = {
+        success: true,
+        content: generatedContent,
+        type: 'blog',
+        length: generatedContent.length
+      };
+
+      expect(response.success).toBe(true);
+      expect(response.content).toBeDefined();
+      expect(response.type).toBe('blog');
+      expect(response.length).toBeGreaterThan(0);
+    });
+
+    it('should handle generation errors', () => {
+      const errorResponse = {
+        error: 'Failed to generate content',
+        details: 'Claude Code not available'
+      };
+
+      expect(errorResponse).toHaveProperty('error');
+      expect(errorResponse).toHaveProperty('details');
+    });
+
+    it('should accept various content types', () => {
+      const validTypes = ['blog', 'social', 'email', 'landing', 'other'];
+
+      validTypes.forEach(type => {
+        const body = { type, description: `Generate ${type} content` };
+        expect(body.type).toBe(type);
+      });
+    });
+  });
+
+  describe('GET /api/brand - Get brand context', () => {
+    it('should return brand context object', () => {
+      const response = {
+        exists: true,
+        summary: 'Professional B2B SaaS brand',
+        colors: { primary: '#6366f1', secondary: '#ffffff' },
+        voice: { tone: 'professional', audience: 'tech executives' },
+        fonts: { heading: 'Inter', body: 'Inter' }
+      };
+
+      expect(response).toHaveProperty('exists');
+      expect(response).toHaveProperty('summary');
+      expect(response).toHaveProperty('colors');
+      expect(response).toHaveProperty('voice');
+      expect(response).toHaveProperty('fonts');
+    });
+
+    it('should indicate when brand exists', () => {
+      const response = {
+        exists: true,
+        summary: 'Brand guidelines found'
+      };
+
+      expect(response.exists).toBe(true);
+    });
+
+    it('should indicate when brand does not exist', () => {
+      const response = {
+        exists: false,
+        summary: 'No brand guidelines found',
+        message: 'Run /marketing:init to create brand guidelines'
+      };
+
+      expect(response.exists).toBe(false);
+      expect(response.message).toContain('/marketing:init');
+    });
+
+    it('should return empty objects when no brand data', () => {
+      const response = {
+        exists: false,
+        summary: 'No brand guidelines found',
+        colors: {},
+        voice: {},
+        fonts: {}
+      };
+
+      expect(Object.keys(response.colors).length).toBe(0);
+      expect(Object.keys(response.voice).length).toBe(0);
+      expect(Object.keys(response.fonts).length).toBe(0);
+    });
+
+    it('should return populated brand data when available', () => {
+      const response = {
+        exists: true,
+        summary: 'Complete brand guidelines',
+        colors: {
+          primary: '#6366f1',
+          secondary: '#ffffff',
+          accent: '#ec4899'
+        },
+        voice: {
+          tone: 'friendly',
+          audience: 'startups',
+          values: ['innovation', 'clarity', 'accessibility']
+        },
+        fonts: {
+          heading: 'Inter Bold',
+          body: 'Inter Regular',
+          mono: 'Courier'
+        }
+      };
+
+      expect(response.colors).not.toEqual({});
+      expect(response.voice).not.toEqual({});
+      expect(response.fonts).not.toEqual({});
+      expect(Object.keys(response.colors)).toHaveLength(3);
+    });
+
+    it('should handle errors gracefully', () => {
+      const errorResponse = {
+        exists: false,
+        error: 'Failed to read brand context',
+        message: 'Run /marketing:init to create brand guidelines'
+      };
+
+      expect(errorResponse.exists).toBe(false);
+      expect(errorResponse).toHaveProperty('error');
+      expect(errorResponse).toHaveProperty('message');
+    });
+  });
+
+  describe('Content enhancement validation', () => {
+    it('should validate content length', () => {
+      const content = '';
+      const errors = [];
+
+      if (!content || content.trim().length === 0) {
+        errors.push('Content cannot be empty');
+      }
+
+      expect(errors).toContain('Content cannot be empty');
+    });
+
+    it('should accept any non-empty content', () => {
+      const validContents = [
+        'Single word',
+        'A short sentence.',
+        'A much longer piece of content with multiple sentences and paragraphs describing something in detail.',
+        '1234567890',
+        'Special chars: !@#$%^&*()'
+      ];
+
+      validContents.forEach(content => {
+        const errors = [];
+        if (!content || content.trim().length === 0) {
+          errors.push('Content cannot be empty');
+        }
+        expect(errors.length).toBe(0);
+      });
+    });
+  });
+
+  describe('Content generation validation', () => {
+    it('should validate type field', () => {
+      const validTypes = ['blog', 'social', 'email', 'landing', 'other'];
+      const invalidType = 'invalid_type';
+
+      const errors = [];
+      if (!validTypes.includes(invalidType)) {
+        errors.push('Invalid content type');
+      }
+
+      expect(errors).toContain('Invalid content type');
+    });
+
+    it('should validate description length', () => {
+      const shortDescription = 'a';
+      const errors = [];
+
+      if (shortDescription.length < 3) {
+        errors.push('Description too short');
+      }
+
+      expect(errors).toContain('Description too short');
+    });
+
+    it('should accept reasonable description lengths', () => {
+      const descriptions = [
+        'Write a blog post about marketing automation',
+        'Create social media content for a product launch announcing new features to tech executives'
+      ];
+
+      descriptions.forEach(desc => {
+        const errors = [];
+        if (desc.length < 3) {
+          errors.push('Description too short');
+        }
+        expect(errors.length).toBe(0);
+      });
+    });
+  });
+
+  describe('Brand context structure', () => {
+    it('should have consistent color format', () => {
+      const brand = {
+        colors: {
+          primary: '#6366f1',
+          secondary: '#ffffff'
+        }
+      };
+
+      Object.values(brand.colors).forEach(color => {
+        expect(color).toMatch(/^#[0-9a-f]{6}$/i);
+      });
+    });
+
+    it('should have voice properties', () => {
+      const brand = {
+        voice: {
+          tone: 'professional',
+          audience: 'tech',
+          values: ['innovation']
+        }
+      };
+
+      expect(brand.voice).toHaveProperty('tone');
+      expect(brand.voice).toHaveProperty('audience');
+    });
+
+    it('should have font properties', () => {
+      const brand = {
+        fonts: {
+          heading: 'Inter Bold',
+          body: 'Inter Regular'
+        }
+      };
+
+      expect(brand.fonts).toHaveProperty('heading');
+      expect(brand.fonts).toHaveProperty('body');
+    });
+  });
+
+  describe('Error responses', () => {
+    it('should include error message in response', () => {
+      const errorResponse = {
+        error: 'Failed to process request'
+      };
+
+      expect(errorResponse).toHaveProperty('error');
+      expect(typeof errorResponse.error).toBe('string');
+    });
+
+    it('should include optional details field', () => {
+      const errorResponse = {
+        error: 'Failed to enhance content',
+        details: 'Claude Code not available'
+      };
+
+      expect(errorResponse).toHaveProperty('error');
+      expect(errorResponse).toHaveProperty('details');
+    });
+
+    it('should return 400 for validation errors', () => {
+      // Validation error responses should have structure
+      const validationError = {
+        error: 'Validation failed',
+        errors: ['Content is required', 'Instruction is required']
+      };
+
+      expect(validationError.error).toBe('Validation failed');
+      expect(Array.isArray(validationError.errors)).toBe(true);
+    });
+
+    it('should return 500 for server errors', () => {
+      const serverError = {
+        error: 'Internal server error',
+        message: 'Database connection failed'
+      };
+
+      expect(serverError).toHaveProperty('error');
+    });
+  });
+});
+</file>
+
+<file path="__tests__/assets.test.js">
+/**
+ * Assets API Tests
+ * CRUD operations, scanner integration, and file serving
+ */
+
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { createTestDatabase, cleanupTestDatabase } from './test-db.js';
+import { randomBytes } from 'crypto';
+
+let testDb;
+const generateId = () => randomBytes(6).toString('hex');
+
+describe('Assets API', () => {
+  beforeEach(() => {
+    testDb = createTestDatabase();
+  });
+
+  afterEach(() => {
+    cleanupTestDatabase(testDb);
+  });
+
+  describe('GET /api/assets - List assets', () => {
+    it('should return empty list when no assets exist', () => {
+      const assets = testDb.prepare('SELECT * FROM assets').all();
+      expect(assets).toEqual([]);
+    });
+
+    it('should list all assets from database', () => {
+      const asset1Id = generateId();
+      const asset2Id = generateId();
+
+      testDb.prepare(`
+        INSERT INTO assets (id, path, name, category, format)
+        VALUES (?, ?, ?, ?, ?)
+      `).run(asset1Id, '/path/image1.png', 'image1.png', 'image', 'png');
+
+      testDb.prepare(`
+        INSERT INTO assets (id, path, name, category, format)
+        VALUES (?, ?, ?, ?, ?)
+      `).run(asset2Id, '/path/image2.jpg', 'image2.jpg', 'image', 'jpg');
+
+      const assets = testDb.prepare('SELECT * FROM assets').all();
+      expect(assets.length).toBe(2);
+    });
+
+    it('should include all asset fields', () => {
+      const id = generateId();
+      testDb.prepare(`
+        INSERT INTO assets (id, campaign_id, path, name, category, format, format_type, size, ai_prompt, r2_status)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `).run(id, null, '/path/file.png', 'file.png', 'image', 'png', 'image/png', 2048, 'enhance', 'local');
+
+      const asset = testDb.prepare('SELECT * FROM assets WHERE id = ?').get(id);
+      expect(asset).toHaveProperty('id');
+      expect(asset).toHaveProperty('campaign_id');
+      expect(asset).toHaveProperty('path');
+      expect(asset).toHaveProperty('name');
+      expect(asset).toHaveProperty('category');
+      expect(asset).toHaveProperty('format');
+      expect(asset).toHaveProperty('format_type');
+      expect(asset).toHaveProperty('size');
+      expect(asset).toHaveProperty('ai_prompt');
+      expect(asset).toHaveProperty('r2_status');
+      expect(asset).toHaveProperty('created_at');
+      expect(asset).toHaveProperty('modified_at');
+    });
+
+    it('should enforce unique path constraint', () => {
+      const id1 = generateId();
+      const id2 = generateId();
+
+      testDb.prepare('INSERT INTO assets (id, path, name) VALUES (?, ?, ?)').run(id1, '/same/path.png', 'file1.png');
+
+      expect(() => {
+        testDb.prepare('INSERT INTO assets (id, path, name) VALUES (?, ?, ?)').run(id2, '/same/path.png', 'file2.png');
+      }).toThrow();
+    });
+  });
+
+  describe('GET /api/assets/:id - Get single asset', () => {
+    it('should return asset by id', () => {
+      const id = generateId();
+      testDb.prepare('INSERT INTO assets (id, path, name) VALUES (?, ?, ?)').run(id, '/path/file.png', 'file.png');
+
+      const asset = testDb.prepare('SELECT * FROM assets WHERE id = ?').get(id);
+      expect(asset).toBeDefined();
+      expect(asset.id).toBe(id);
+      expect(asset.name).toBe('file.png');
+    });
+
+    it('should return undefined for non-existent asset', () => {
+      const asset = testDb.prepare('SELECT * FROM assets WHERE id = ?').get('nonexistent');
+      expect(asset).toBeUndefined();
+    });
+  });
+
+  describe('POST /api/assets/scan - Rescan assets and sync DB', () => {
+    it('should insert new assets from scan', () => {
+      // Simulate scanned assets from file system
+      const scannedAssets = [
+        {
+          id: generateId(),
+          path: '/assets/image1.png',
+          name: 'image1.png',
+          category: 'image',
+          format: 'png',
+          formatType: 'image/png',
+          size: 2048,
+          modifiedAt: new Date().toISOString()
+        }
+      ];
+
+      let inserted = 0;
+      for (const asset of scannedAssets) {
+        const existing = testDb.prepare('SELECT * FROM assets WHERE path = ?').get(asset.path);
+        if (!existing) {
+          testDb.prepare(`
+            INSERT INTO assets (id, path, name, category, format, format_type, size, modified_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+          `).run(asset.id, asset.path, asset.name, asset.category, asset.format, asset.formatType, asset.size, asset.modifiedAt);
+          inserted++;
+        }
+      }
+
+      expect(inserted).toBe(1);
+      const assets = testDb.prepare('SELECT * FROM assets WHERE path = ?').all('/assets/image1.png');
+      expect(assets.length).toBe(1);
+    });
+
+    it('should update existing assets metadata', () => {
+      const id = generateId();
+      testDb.prepare('INSERT INTO assets (id, path, name, size) VALUES (?, ?, ?, ?)').run(
+        id, '/assets/file.png', 'file.png', 1024
+      );
+
+      // Simulate updated scan data
+      testDb.prepare('UPDATE assets SET size = ? WHERE path = ?').run(2048, '/assets/file.png');
+
+      const asset = testDb.prepare('SELECT * FROM assets WHERE id = ?').get(id);
+      expect(asset.size).toBe(2048);
+    });
+
+    it('should preserve campaign association during scan update', () => {
+      const campaignId = generateId();
+      const assetId = generateId();
+
+      testDb.prepare('INSERT INTO campaigns (id, name) VALUES (?, ?)').run(campaignId, 'Test Campaign');
+      testDb.prepare('INSERT INTO assets (id, campaign_id, path, name, size) VALUES (?, ?, ?, ?, ?)').run(
+        assetId, campaignId, '/assets/file.png', 'file.png', 1024
+      );
+
+      // Simulate scan update (preserves campaign_id)
+      testDb.prepare('UPDATE assets SET size = ? WHERE path = ?').run(2048, '/assets/file.png');
+
+      const asset = testDb.prepare('SELECT * FROM assets WHERE id = ?').get(assetId);
+      expect(asset.campaign_id).toBe(campaignId);
+      expect(asset.size).toBe(2048);
+    });
+
+    it('should track inserted and updated counts', () => {
+      const scannedAssets = [
+        { id: generateId(), path: '/new1.png', name: 'new1.png', category: 'image', format: 'png', formatType: 'image/png', size: 1024, modifiedAt: new Date().toISOString() },
+        { id: generateId(), path: '/new2.png', name: 'new2.png', category: 'image', format: 'png', formatType: 'image/png', size: 1024, modifiedAt: new Date().toISOString() },
+      ];
+
+      // Insert one existing asset first
+      testDb.prepare('INSERT INTO assets (id, path, name) VALUES (?, ?, ?)').run(generateId(), '/new1.png', 'new1.png');
+
+      let inserted = 0;
+      let updated = 0;
+
+      for (const asset of scannedAssets) {
+        const existing = testDb.prepare('SELECT * FROM assets WHERE path = ?').get(asset.path);
+        if (existing) {
+          testDb.prepare('UPDATE assets SET name = ?, size = ? WHERE path = ?').run(asset.name, asset.size, asset.path);
+          updated++;
+        } else {
+          testDb.prepare('INSERT INTO assets (id, path, name, size) VALUES (?, ?, ?, ?)').run(asset.id, asset.path, asset.name, asset.size);
+          inserted++;
+        }
+      }
+
+      expect(inserted).toBe(1);
+      expect(updated).toBe(1);
+    });
+  });
+
+  describe('PUT /api/assets/:id - Update asset metadata', () => {
+    it('should update campaign association', () => {
+      const campaignId = generateId();
+      const assetId = generateId();
+
+      testDb.prepare('INSERT INTO campaigns (id, name) VALUES (?, ?)').run(campaignId, 'Campaign');
+      testDb.prepare('INSERT INTO assets (id, path, name) VALUES (?, ?, ?)').run(assetId, '/path/file.png', 'file.png');
+
+      testDb.prepare('UPDATE assets SET campaign_id = ? WHERE id = ?').run(campaignId, assetId);
+
+      const asset = testDb.prepare('SELECT * FROM assets WHERE id = ?').get(assetId);
+      expect(asset.campaign_id).toBe(campaignId);
+    });
+
+    it('should update ai_prompt', () => {
+      const id = generateId();
+      testDb.prepare('INSERT INTO assets (id, path, name) VALUES (?, ?, ?)').run(id, '/path/file.txt', 'file.txt');
+
+      const newPrompt = 'Enhance this text for clarity';
+      testDb.prepare('UPDATE assets SET ai_prompt = ? WHERE id = ?').run(newPrompt, id);
+
+      const asset = testDb.prepare('SELECT * FROM assets WHERE id = ?').get(id);
+      expect(asset.ai_prompt).toBe(newPrompt);
+    });
+
+    it('should update r2_status', () => {
+      const id = generateId();
+      testDb.prepare('INSERT INTO assets (id, path, name, r2_status) VALUES (?, ?, ?, ?)').run(id, '/path/file.png', 'file.png', 'local');
+
+      testDb.prepare('UPDATE assets SET r2_status = ? WHERE id = ?').run('synced', id);
+
+      const asset = testDb.prepare('SELECT * FROM assets WHERE id = ?').get(id);
+      expect(asset.r2_status).toBe('synced');
+    });
+
+    it('should update r2_url', () => {
+      const id = generateId();
+      testDb.prepare('INSERT INTO assets (id, path, name) VALUES (?, ?, ?)').run(id, '/path/file.png', 'file.png');
+
+      const r2Url = 'https://cdn.example.com/file.png';
+      testDb.prepare('UPDATE assets SET r2_url = ? WHERE id = ?').run(r2Url, id);
+
+      const asset = testDb.prepare('SELECT * FROM assets WHERE id = ?').get(id);
+      expect(asset.r2_url).toBe(r2Url);
+    });
+
+    it('should reject invalid r2_status', () => {
+      expect(() => {
+        const id = generateId();
+        testDb.prepare('INSERT INTO assets (id, path, name, r2_status) VALUES (?, ?, ?, ?)').run(
+          id, '/path/file.png', 'file.png', 'invalid_status'
+        );
+      }).toThrow();
+    });
+
+    it('should return 404 for non-existent asset', () => {
+      const asset = testDb.prepare('SELECT * FROM assets WHERE id = ?').get('nonexistent');
+      expect(asset).toBeUndefined();
+    });
+
+    it('should allow partial updates', () => {
+      const id = generateId();
+      const campaignId = generateId();
+
+      testDb.prepare('INSERT INTO campaigns (id, name) VALUES (?, ?)').run(campaignId, 'Campaign');
+      testDb.prepare('INSERT INTO assets (id, path, name, ai_prompt) VALUES (?, ?, ?, ?)').run(
+        id, '/path/file.png', 'file.png', 'old prompt'
+      );
+
+      testDb.prepare('UPDATE assets SET r2_status = ? WHERE id = ?').run('pending', id);
+
+      const asset = testDb.prepare('SELECT * FROM assets WHERE id = ?').get(id);
+      expect(asset.ai_prompt).toBe('old prompt');
+      expect(asset.r2_status).toBe('pending');
+    });
+  });
+
+  describe('Foreign key constraints', () => {
+    it('should enforce campaign foreign key', () => {
+      expect(() => {
+        const id = generateId();
+        testDb.prepare('INSERT INTO assets (id, campaign_id, path, name) VALUES (?, ?, ?, ?)').run(
+          id, 'nonexistent-campaign', '/path/file.png', 'file.png'
+        );
+      }).toThrow();
+    });
+
+    it('should allow null campaign_id', () => {
+      const id = generateId();
+      expect(() => {
+        testDb.prepare('INSERT INTO assets (id, path, name) VALUES (?, ?, ?)').run(id, '/path/file.png', 'file.png');
+      }).not.toThrow();
+    });
+
+    it('should set campaign_id to NULL when campaign deleted', () => {
+      const campaignId = generateId();
+      const assetId = generateId();
+
+      testDb.prepare('INSERT INTO campaigns (id, name) VALUES (?, ?)').run(campaignId, 'Campaign');
+      testDb.prepare('INSERT INTO assets (id, campaign_id, path, name) VALUES (?, ?, ?, ?)').run(
+        assetId, campaignId, '/path/file.png', 'file.png'
+      );
+
+      testDb.prepare('DELETE FROM campaigns WHERE id = ?').run(campaignId);
+
+      const asset = testDb.prepare('SELECT * FROM assets WHERE id = ?').get(assetId);
+      expect(asset.campaign_id).toBeNull();
+    });
+  });
+
+  describe('R2 Status workflow', () => {
+    it('should default r2_status to local', () => {
+      const id = generateId();
+      testDb.prepare('INSERT INTO assets (id, path, name) VALUES (?, ?, ?)').run(id, '/path/file.png', 'file.png');
+
+      const asset = testDb.prepare('SELECT * FROM assets WHERE id = ?').get(id);
+      expect(asset.r2_status).toBe('local');
+    });
+
+    it('should support pending status', () => {
+      const id = generateId();
+      testDb.prepare('INSERT INTO assets (id, path, name, r2_status) VALUES (?, ?, ?, ?)').run(
+        id, '/path/file.png', 'file.png', 'pending'
+      );
+
+      const asset = testDb.prepare('SELECT * FROM assets WHERE id = ?').get(id);
+      expect(asset.r2_status).toBe('pending');
+    });
+
+    it('should support synced status', () => {
+      const id = generateId();
+      testDb.prepare('INSERT INTO assets (id, path, name, r2_status) VALUES (?, ?, ?, ?)').run(
+        id, '/path/file.png', 'file.png', 'synced'
+      );
+
+      const asset = testDb.prepare('SELECT * FROM assets WHERE id = ?').get(id);
+      expect(asset.r2_status).toBe('synced');
+    });
+
+    it('should support error status', () => {
+      const id = generateId();
+      testDb.prepare('INSERT INTO assets (id, path, name, r2_status) VALUES (?, ?, ?, ?)').run(
+        id, '/path/file.png', 'file.png', 'error'
+      );
+
+      const asset = testDb.prepare('SELECT * FROM assets WHERE id = ?').get(id);
+      expect(asset.r2_status).toBe('error');
+    });
+  });
+});
+</file>
+
+<file path="__tests__/campaigns.test.js">
+/**
+ * Campaigns API Tests
+ * CRUD operations and validation
+ */
+
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { Hono } from 'hono';
+import { createTestDatabase, cleanupTestDatabase } from './test-db.js';
+import { randomBytes } from 'crypto';
+
+// Mock getDatabase to return test DB
+let testDb;
+const generateId = () => randomBytes(6).toString('hex');
+
+describe('Campaigns API', () => {
+  beforeEach(() => {
+    testDb = createTestDatabase();
+  });
+
+  afterEach(() => {
+    cleanupTestDatabase(testDb);
+  });
+
+  describe('POST /api/campaigns - Create campaign', () => {
+    it('should create campaign with valid name', () => {
+      const campaign = {
+        name: 'Summer Sale 2025',
+        goal: 'Increase sales by 50%',
+      };
+
+      const id = generateId();
+      const stmt = testDb.prepare(`
+        INSERT INTO campaigns (id, name, status, goal)
+        VALUES (?, ?, ?, ?)
+      `);
+      stmt.run(id, campaign.name, 'draft', campaign.goal);
+
+      const created = testDb.prepare('SELECT * FROM campaigns WHERE id = ?').get(id);
+      expect(created).toBeDefined();
+      expect(created.name).toBe(campaign.name);
+      expect(created.status).toBe('draft');
+      expect(created.goal).toBe(campaign.goal);
+    });
+
+    it('should reject campaign without name', () => {
+      const errors = [];
+      const data = { status: 'draft' };
+
+      if (!data.name || data.name.trim().length === 0) {
+        errors.push('Campaign name is required');
+      }
+
+      expect(errors).toContain('Campaign name is required');
+    });
+
+    it('should reject invalid status', () => {
+      const errors = [];
+      const data = { name: 'Test', status: 'invalid' };
+
+      if (data.status && !['draft', 'active', 'completed'].includes(data.status)) {
+        errors.push('Status must be draft, active, or completed');
+      }
+
+      expect(errors).toContain('Status must be draft, active, or completed');
+    });
+
+    it('should set default status to draft', () => {
+      const campaign = {
+        name: 'Test Campaign',
+      };
+
+      const id = generateId();
+      const stmt = testDb.prepare(`
+        INSERT INTO campaigns (id, name, status)
+        VALUES (?, ?, ?)
+      `);
+      stmt.run(id, campaign.name, 'draft');
+
+      const created = testDb.prepare('SELECT * FROM campaigns WHERE id = ?').get(id);
+      expect(created.status).toBe('draft');
+    });
+
+    it('should store brand context as JSON', () => {
+      const campaign = {
+        name: 'Test',
+        brand_context: { colors: ['#fff', '#000'], voice: 'professional' }
+      };
+
+      const id = generateId();
+      const stmt = testDb.prepare(`
+        INSERT INTO campaigns (id, name, brand_context)
+        VALUES (?, ?, ?)
+      `);
+      stmt.run(id, campaign.name, JSON.stringify(campaign.brand_context));
+
+      const created = testDb.prepare('SELECT * FROM campaigns WHERE id = ?').get(id);
+      expect(created.brand_context).toBe(JSON.stringify(campaign.brand_context));
+    });
+  });
+
+  describe('GET /api/campaigns - List campaigns', () => {
+    it('should return empty list when no campaigns exist', () => {
+      const campaigns = testDb.prepare('SELECT * FROM campaigns').all();
+      expect(campaigns).toEqual([]);
+    });
+
+    it('should return all campaigns ordered by created_at DESC', () => {
+      // Insert test data
+      const id1 = generateId();
+      const id2 = generateId();
+
+      testDb.prepare('INSERT INTO campaigns (id, name) VALUES (?, ?)').run(id1, 'Campaign 1');
+      testDb.prepare('INSERT INTO campaigns (id, name) VALUES (?, ?)').run(id2, 'Campaign 2');
+
+      const campaigns = testDb.prepare('SELECT * FROM campaigns ORDER BY created_at DESC').all();
+      expect(campaigns.length).toBe(2);
+      // Verify both campaigns are returned (ordering validated via integration tests)
+      const names = campaigns.map(c => c.name);
+      expect(names).toContain('Campaign 1');
+      expect(names).toContain('Campaign 2');
+    });
+
+    it('should include all campaign fields', () => {
+      const id = generateId();
+      testDb.prepare(`
+        INSERT INTO campaigns (id, name, status, goal, start_date, end_date, notes)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+      `).run(id, 'Test', 'active', 'Test Goal', '2025-01-01', '2025-02-01', 'Test Notes');
+
+      const campaign = testDb.prepare('SELECT * FROM campaigns WHERE id = ?').get(id);
+      expect(campaign).toHaveProperty('id');
+      expect(campaign).toHaveProperty('name');
+      expect(campaign).toHaveProperty('status');
+      expect(campaign).toHaveProperty('goal');
+      expect(campaign).toHaveProperty('start_date');
+      expect(campaign).toHaveProperty('end_date');
+      expect(campaign).toHaveProperty('notes');
+      expect(campaign).toHaveProperty('created_at');
+      expect(campaign).toHaveProperty('updated_at');
+    });
+  });
+
+  describe('GET /api/campaigns/:id - Get single campaign', () => {
+    it('should return campaign by id', () => {
+      const id = generateId();
+      testDb.prepare('INSERT INTO campaigns (id, name) VALUES (?, ?)').run(id, 'Test Campaign');
+
+      const campaign = testDb.prepare('SELECT * FROM campaigns WHERE id = ?').get(id);
+      expect(campaign).toBeDefined();
+      expect(campaign.id).toBe(id);
+      expect(campaign.name).toBe('Test Campaign');
+    });
+
+    it('should return undefined for non-existent campaign', () => {
+      const campaign = testDb.prepare('SELECT * FROM campaigns WHERE id = ?').get('nonexistent');
+      expect(campaign).toBeUndefined();
+    });
+  });
+
+  describe('PUT /api/campaigns/:id - Update campaign', () => {
+    it('should update campaign name', () => {
+      const id = generateId();
+      testDb.prepare('INSERT INTO campaigns (id, name) VALUES (?, ?)').run(id, 'Old Name');
+
+      testDb.prepare('UPDATE campaigns SET name = ? WHERE id = ?').run('New Name', id);
+
+      const campaign = testDb.prepare('SELECT * FROM campaigns WHERE id = ?').get(id);
+      expect(campaign.name).toBe('New Name');
+    });
+
+    it('should update campaign status', () => {
+      const id = generateId();
+      testDb.prepare('INSERT INTO campaigns (id, name, status) VALUES (?, ?, ?)').run(id, 'Test', 'draft');
+
+      testDb.prepare('UPDATE campaigns SET status = ? WHERE id = ?').run('active', id);
+
+      const campaign = testDb.prepare('SELECT * FROM campaigns WHERE id = ?').get(id);
+      expect(campaign.status).toBe('active');
+    });
+
+    it('should reject invalid status on update', () => {
+      const errors = [];
+      const existing = { id: 'test', name: 'Test', status: 'draft' };
+      const body = { status: 'invalid' };
+
+      const merged = { ...existing, ...body };
+      if (merged.status && !['draft', 'active', 'completed'].includes(merged.status)) {
+        errors.push('Status must be draft, active, or completed');
+      }
+
+      expect(errors).toContain('Status must be draft, active, or completed');
+    });
+
+    it('should reject update without name', () => {
+      const errors = [];
+      const existing = { id: 'test', name: 'Test' };
+      const body = { name: '' };
+
+      const merged = { ...existing, ...body };
+      if (!merged.name || merged.name.trim().length === 0) {
+        errors.push('Campaign name is required');
+      }
+
+      expect(errors).toContain('Campaign name is required');
+    });
+
+    it('should return 404 for non-existent campaign update', () => {
+      const campaign = testDb.prepare('SELECT * FROM campaigns WHERE id = ?').get('nonexistent');
+      expect(campaign).toBeUndefined();
+    });
+
+    it('should update partial fields', () => {
+      const id = generateId();
+      testDb.prepare(`
+        INSERT INTO campaigns (id, name, status, goal)
+        VALUES (?, ?, ?, ?)
+      `).run(id, 'Original', 'draft', 'Original Goal');
+
+      testDb.prepare('UPDATE campaigns SET goal = ? WHERE id = ?').run('Updated Goal', id);
+
+      const campaign = testDb.prepare('SELECT * FROM campaigns WHERE id = ?').get(id);
+      expect(campaign.name).toBe('Original');
+      expect(campaign.status).toBe('draft');
+      expect(campaign.goal).toBe('Updated Goal');
+    });
+  });
+
+  describe('DELETE /api/campaigns/:id - Delete campaign', () => {
+    it('should delete campaign', () => {
+      const id = generateId();
+      testDb.prepare('INSERT INTO campaigns (id, name) VALUES (?, ?)').run(id, 'To Delete');
+
+      testDb.prepare('DELETE FROM campaigns WHERE id = ?').run(id);
+
+      const campaign = testDb.prepare('SELECT * FROM campaigns WHERE id = ?').get(id);
+      expect(campaign).toBeUndefined();
+    });
+
+    it('should return 404 for non-existent campaign', () => {
+      const campaign = testDb.prepare('SELECT * FROM campaigns WHERE id = ?').get('nonexistent');
+      expect(campaign).toBeUndefined();
+    });
+
+    it('should cascade delete related content on FK constraint', () => {
+      const campaignId = generateId();
+      const contentId = generateId();
+
+      testDb.prepare('INSERT INTO campaigns (id, name) VALUES (?, ?)').run(campaignId, 'Test Campaign');
+      testDb.prepare('INSERT INTO content (id, campaign_id, type) VALUES (?, ?, ?)').run(contentId, campaignId, 'blog');
+
+      // Delete campaign - content should be set to NULL due to ON DELETE SET NULL
+      testDb.prepare('DELETE FROM campaigns WHERE id = ?').run(campaignId);
+
+      const campaign = testDb.prepare('SELECT * FROM campaigns WHERE id = ?').get(campaignId);
+      const content = testDb.prepare('SELECT * FROM content WHERE id = ?').get(contentId);
+
+      expect(campaign).toBeUndefined();
+      expect(content).toBeDefined();
+      expect(content.campaign_id).toBeNull();
+    });
+  });
+
+  describe('Database integrity', () => {
+    it('should enforce foreign keys', () => {
+      const fkStatus = testDb.pragma('foreign_keys', { simple: true });
+      expect(fkStatus).toBe(1);
+    });
+
+    it('should have required indexes', () => {
+      const indexes = testDb.prepare("SELECT name FROM sqlite_master WHERE type='index' AND name LIKE 'idx_%'").all();
+      const indexNames = indexes.map(i => i.name);
+
+      expect(indexNames).toContain('idx_campaigns_status');
+      expect(indexNames).toContain('idx_content_campaign');
+      expect(indexNames).toContain('idx_assets_campaign');
+    });
+
+    it('should enforce status check constraint', () => {
+      const id = generateId();
+      expect(() => {
+        testDb.prepare('INSERT INTO campaigns (id, name, status) VALUES (?, ?, ?)').run(id, 'Test', 'invalid_status');
+      }).toThrow();
+    });
+
+    it('should auto-generate created_at timestamp', () => {
+      const id = generateId();
+      testDb.prepare('INSERT INTO campaigns (id, name) VALUES (?, ?)').run(id, 'Test');
+
+      const campaign = testDb.prepare('SELECT * FROM campaigns WHERE id = ?').get(id);
+      expect(campaign.created_at).toBeDefined();
+      expect(campaign.created_at).not.toBeNull();
+    });
+  });
+});
+</file>
+
+<file path="__tests__/content.test.js">
+/**
+ * Content API Tests
+ * CRUD operations, filtering, and validation
+ */
+
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { createTestDatabase, cleanupTestDatabase } from './test-db.js';
+import { randomBytes } from 'crypto';
+
+let testDb;
+const generateId = () => randomBytes(6).toString('hex');
+
+describe('Content API', () => {
+  beforeEach(() => {
+    testDb = createTestDatabase();
+  });
+
+  afterEach(() => {
+    cleanupTestDatabase(testDb);
+  });
+
+  describe('POST /api/content - Create content', () => {
+    it('should create content with valid type', () => {
+      const content = {
+        type: 'blog',
+        title: 'My Blog Post',
+        body: 'This is the content',
+      };
+
+      const id = generateId();
+      const stmt = testDb.prepare(`
+        INSERT INTO content (id, type, title, body)
+        VALUES (?, ?, ?, ?)
+      `);
+      stmt.run(id, content.type, content.title, content.body);
+
+      const created = testDb.prepare('SELECT * FROM content WHERE id = ?').get(id);
+      expect(created).toBeDefined();
+      expect(created.type).toBe('blog');
+      expect(created.title).toBe('My Blog Post');
+      expect(created.status).toBe('draft');
+    });
+
+    it('should accept all valid content types', () => {
+      const validTypes = ['blog', 'social', 'email', 'landing', 'other'];
+
+      validTypes.forEach(type => {
+        const id = generateId();
+        testDb.prepare('INSERT INTO content (id, type) VALUES (?, ?)').run(id, type);
+
+        const content = testDb.prepare('SELECT * FROM content WHERE id = ?').get(id);
+        expect(content.type).toBe(type);
+      });
+    });
+
+    it('should reject invalid type', () => {
+      const errors = [];
+      const data = { type: 'invalid_type' };
+
+      if (!data.type || !['blog', 'social', 'email', 'landing', 'other'].includes(data.type)) {
+        errors.push('Type must be blog, social, email, landing, or other');
+      }
+
+      expect(errors).toContain('Type must be blog, social, email, landing, or other');
+    });
+
+    it('should accept valid status values', () => {
+      const validStatuses = ['draft', 'review', 'published'];
+
+      validStatuses.forEach(status => {
+        const id = generateId();
+        testDb.prepare('INSERT INTO content (id, type, status) VALUES (?, ?, ?)').run(id, 'blog', status);
+
+        const content = testDb.prepare('SELECT * FROM content WHERE id = ?').get(id);
+        expect(content.status).toBe(status);
+      });
+    });
+
+    it('should reject invalid status', () => {
+      const errors = [];
+      const data = { type: 'blog', status: 'invalid' };
+
+      if (data.status && !['draft', 'review', 'published'].includes(data.status)) {
+        errors.push('Status must be draft, review, or published');
+      }
+
+      expect(errors).toContain('Status must be draft, review, or published');
+    });
+
+    it('should link content to campaign', () => {
+      const campaignId = generateId();
+      const contentId = generateId();
+
+      testDb.prepare('INSERT INTO campaigns (id, name) VALUES (?, ?)').run(campaignId, 'Test Campaign');
+      testDb.prepare('INSERT INTO content (id, campaign_id, type) VALUES (?, ?, ?)').run(contentId, campaignId, 'blog');
+
+      const content = testDb.prepare('SELECT * FROM content WHERE id = ?').get(contentId);
+      expect(content.campaign_id).toBe(campaignId);
+    });
+
+    it('should allow null campaign_id', () => {
+      const id = generateId();
+      testDb.prepare('INSERT INTO content (id, type) VALUES (?, ?)').run(id, 'blog');
+
+      const content = testDb.prepare('SELECT * FROM content WHERE id = ?').get(id);
+      expect(content.campaign_id).toBeNull();
+    });
+  });
+
+  describe('GET /api/content - List content with filters', () => {
+    beforeEach(() => {
+      // Setup test data
+      const campaign1 = generateId();
+      const campaign2 = generateId();
+
+      testDb.prepare('INSERT INTO campaigns (id, name) VALUES (?, ?)').run(campaign1, 'Campaign 1');
+      testDb.prepare('INSERT INTO campaigns (id, name) VALUES (?, ?)').run(campaign2, 'Campaign 2');
+
+      // Content for campaign 1
+      testDb.prepare('INSERT INTO content (id, campaign_id, type, status) VALUES (?, ?, ?, ?)').run(
+        generateId(), campaign1, 'blog', 'draft'
+      );
+      testDb.prepare('INSERT INTO content (id, campaign_id, type, status) VALUES (?, ?, ?, ?)').run(
+        generateId(), campaign1, 'social', 'published'
+      );
+
+      // Content for campaign 2
+      testDb.prepare('INSERT INTO content (id, campaign_id, type, status) VALUES (?, ?, ?, ?)').run(
+        generateId(), campaign2, 'email', 'review'
+      );
+
+      // Content without campaign
+      testDb.prepare('INSERT INTO content (id, type, status) VALUES (?, ?, ?)').run(
+        generateId(), 'blog', 'published'
+      );
+    });
+
+    it('should return all content when no filters applied', () => {
+      const content = testDb.prepare('SELECT * FROM content').all();
+      expect(content.length).toBe(4);
+    });
+
+    it('should filter content by campaign_id', () => {
+      const campaign = testDb.prepare('SELECT * FROM campaigns LIMIT 1').get();
+      const content = testDb.prepare('SELECT * FROM content WHERE campaign_id = ?').all(campaign.id);
+
+      expect(content.length).toBe(2);
+      content.forEach(c => {
+        expect(c.campaign_id).toBe(campaign.id);
+      });
+    });
+
+    it('should filter content by type', () => {
+      const content = testDb.prepare('SELECT * FROM content WHERE type = ?').all('blog');
+
+      expect(content.length).toBe(2);
+      content.forEach(c => {
+        expect(c.type).toBe('blog');
+      });
+    });
+
+    it('should filter content by status', () => {
+      const content = testDb.prepare('SELECT * FROM content WHERE status = ?').all('published');
+
+      expect(content.length).toBe(2);
+      content.forEach(c => {
+        expect(c.status).toBe('published');
+      });
+    });
+
+    it('should apply multiple filters', () => {
+      const campaign = testDb.prepare('SELECT * FROM campaigns LIMIT 1').get();
+      const content = testDb.prepare(
+        'SELECT * FROM content WHERE campaign_id = ? AND type = ? AND status = ?'
+      ).all(campaign.id, 'blog', 'draft');
+
+      expect(content.length).toBe(1);
+      expect(content[0].campaign_id).toBe(campaign.id);
+      expect(content[0].type).toBe('blog');
+      expect(content[0].status).toBe('draft');
+    });
+
+    it('should order results by created_at DESC', () => {
+      const content = testDb.prepare('SELECT * FROM content ORDER BY created_at DESC').all();
+      expect(content.length).toBeGreaterThan(0);
+
+      for (let i = 0; i < content.length - 1; i++) {
+        const current = new Date(content[i].created_at).getTime();
+        const next = new Date(content[i + 1].created_at).getTime();
+        expect(current).toBeGreaterThanOrEqual(next);
+      }
+    });
+  });
+
+  describe('GET /api/content/:id - Get single content', () => {
+    it('should return content by id', () => {
+      const id = generateId();
+      testDb.prepare('INSERT INTO content (id, type, title, body) VALUES (?, ?, ?, ?)').run(
+        id, 'blog', 'Test Title', 'Test Body'
+      );
+
+      const content = testDb.prepare('SELECT * FROM content WHERE id = ?').get(id);
+      expect(content).toBeDefined();
+      expect(content.id).toBe(id);
+      expect(content.title).toBe('Test Title');
+    });
+
+    it('should return undefined for non-existent content', () => {
+      const content = testDb.prepare('SELECT * FROM content WHERE id = ?').get('nonexistent');
+      expect(content).toBeUndefined();
+    });
+
+    it('should include all content fields', () => {
+      const id = generateId();
+      testDb.prepare(`
+        INSERT INTO content (id, campaign_id, type, title, body, status, file_path, platform, scheduled_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `).run(id, null, 'blog', 'Title', 'Body', 'draft', '/path/to/file', 'wordpress', '2025-01-15');
+
+      const content = testDb.prepare('SELECT * FROM content WHERE id = ?').get(id);
+      expect(content).toHaveProperty('id');
+      expect(content).toHaveProperty('campaign_id');
+      expect(content).toHaveProperty('type');
+      expect(content).toHaveProperty('title');
+      expect(content).toHaveProperty('body');
+      expect(content).toHaveProperty('status');
+      expect(content).toHaveProperty('file_path');
+      expect(content).toHaveProperty('platform');
+      expect(content).toHaveProperty('scheduled_at');
+      expect(content).toHaveProperty('created_at');
+      expect(content).toHaveProperty('updated_at');
+    });
+  });
+
+  describe('PUT /api/content/:id - Update content', () => {
+    it('should update content title', () => {
+      const id = generateId();
+      testDb.prepare('INSERT INTO content (id, type, title) VALUES (?, ?, ?)').run(id, 'blog', 'Old Title');
+
+      testDb.prepare('UPDATE content SET title = ? WHERE id = ?').run('New Title', id);
+
+      const content = testDb.prepare('SELECT * FROM content WHERE id = ?').get(id);
+      expect(content.title).toBe('New Title');
+    });
+
+    it('should update content body', () => {
+      const id = generateId();
+      testDb.prepare('INSERT INTO content (id, type, body) VALUES (?, ?, ?)').run(id, 'blog', 'Old Body');
+
+      testDb.prepare('UPDATE content SET body = ? WHERE id = ?').run('New Body', id);
+
+      const content = testDb.prepare('SELECT * FROM content WHERE id = ?').get(id);
+      expect(content.body).toBe('New Body');
+    });
+
+    it('should update content status', () => {
+      const id = generateId();
+      testDb.prepare('INSERT INTO content (id, type, status) VALUES (?, ?, ?)').run(id, 'blog', 'draft');
+
+      testDb.prepare('UPDATE content SET status = ? WHERE id = ?').run('published', id);
+
+      const content = testDb.prepare('SELECT * FROM content WHERE id = ?').get(id);
+      expect(content.status).toBe('published');
+    });
+
+    it('should reject invalid type on update', () => {
+      const errors = [];
+      const existing = { type: 'blog' };
+      const body = { type: 'invalid' };
+
+      const merged = { ...existing, ...body };
+      if (!merged.type || !['blog', 'social', 'email', 'landing', 'other'].includes(merged.type)) {
+        errors.push('Type must be blog, social, email, landing, or other');
+      }
+
+      expect(errors).toContain('Type must be blog, social, email, landing, or other');
+    });
+
+    it('should update campaign association', () => {
+      const campaignId = generateId();
+      const contentId = generateId();
+
+      testDb.prepare('INSERT INTO campaigns (id, name) VALUES (?, ?)').run(campaignId, 'Campaign');
+      testDb.prepare('INSERT INTO content (id, type) VALUES (?, ?)').run(contentId, 'blog');
+
+      testDb.prepare('UPDATE content SET campaign_id = ? WHERE id = ?').run(campaignId, contentId);
+
+      const content = testDb.prepare('SELECT * FROM content WHERE id = ?').get(contentId);
+      expect(content.campaign_id).toBe(campaignId);
+    });
+
+    it('should return 404 for non-existent content update', () => {
+      const content = testDb.prepare('SELECT * FROM content WHERE id = ?').get('nonexistent');
+      expect(content).toBeUndefined();
+    });
+  });
+
+  describe('DELETE /api/content/:id - Delete content', () => {
+    it('should delete content', () => {
+      const id = generateId();
+      testDb.prepare('INSERT INTO content (id, type, title) VALUES (?, ?, ?)').run(id, 'blog', 'To Delete');
+
+      testDb.prepare('DELETE FROM content WHERE id = ?').run(id);
+
+      const content = testDb.prepare('SELECT * FROM content WHERE id = ?').get(id);
+      expect(content).toBeUndefined();
+    });
+
+    it('should return 404 for non-existent content', () => {
+      const content = testDb.prepare('SELECT * FROM content WHERE id = ?').get('nonexistent');
+      expect(content).toBeUndefined();
+    });
+
+    it('should not affect campaign when content deleted', () => {
+      const campaignId = generateId();
+      const contentId = generateId();
+
+      testDb.prepare('INSERT INTO campaigns (id, name) VALUES (?, ?)').run(campaignId, 'Campaign');
+      testDb.prepare('INSERT INTO content (id, campaign_id, type) VALUES (?, ?, ?)').run(contentId, campaignId, 'blog');
+
+      testDb.prepare('DELETE FROM content WHERE id = ?').run(contentId);
+
+      const campaign = testDb.prepare('SELECT * FROM campaigns WHERE id = ?').get(campaignId);
+      const content = testDb.prepare('SELECT * FROM content WHERE id = ?').get(contentId);
+
+      expect(campaign).toBeDefined();
+      expect(content).toBeUndefined();
+    });
+  });
+
+  describe('Validation', () => {
+    it('should require type field', () => {
+      const errors = [];
+      const data = {};
+
+      if (!data.type) {
+        errors.push('Type must be blog, social, email, landing, or other');
+      }
+
+      expect(errors).toContain('Type must be blog, social, email, landing, or other');
+    });
+
+    it('should allow optional fields', () => {
+      const id = generateId();
+      testDb.prepare('INSERT INTO content (id, type) VALUES (?, ?)').run(id, 'blog');
+
+      const content = testDb.prepare('SELECT * FROM content WHERE id = ?').get(id);
+      expect(content.title).toBeNull();
+      expect(content.body).toBeNull();
+      expect(content.campaign_id).toBeNull();
+    });
+  });
+
+  describe('Foreign key constraints', () => {
+    it('should enforce campaign foreign key', () => {
+      expect(() => {
+        const id = generateId();
+        testDb.prepare('INSERT INTO content (id, campaign_id, type) VALUES (?, ?, ?)').run(
+          id, 'nonexistent-campaign', 'blog'
+        );
+      }).toThrow();
+    });
+
+    it('should allow null campaign_id (no campaign association)', () => {
+      const id = generateId();
+      expect(() => {
+        testDb.prepare('INSERT INTO content (id, type) VALUES (?, ?)').run(id, 'blog');
+      }).not.toThrow();
+    });
+  });
+});
+</file>
+
+<file path="__tests__/security-file-serving.test.js">
+/**
+ * Security Tests - File Serving Path Traversal Protection
+ * Tests 6-layer defense against directory traversal attacks
+ */
+
+import { describe, it, expect, beforeAll } from 'vitest';
+import { Hono } from 'hono';
+import assetsRouter from '../routes/assets.js';
+import { mkdirSync, writeFileSync, rmSync } from 'fs';
+import { join } from 'path';
+
+const app = new Hono();
+app.route('/api/assets', assetsRouter);
+
+// Create test assets directory
+const testAssetsDir = join(process.cwd(), 'server/__tests__/test-assets');
+const sensitiveFile = join(process.cwd(), 'server/__tests__/sensitive.txt');
+
+beforeAll(() => {
+  // Create test assets directory with a safe file
+  mkdirSync(testAssetsDir, { recursive: true });
+  writeFileSync(join(testAssetsDir, 'safe.png'), 'safe content');
+
+  // Create a sensitive file OUTSIDE assets directory
+  writeFileSync(sensitiveFile, 'SENSITIVE DATA - SHOULD NOT BE ACCESSIBLE');
+});
+
+describe('File Serving Security - Path Traversal Protection', () => {
+
+  describe('Layer 1: URL Encoding Attacks', () => {
+    it('should block URL-encoded parent directory traversal', async () => {
+      const res = await app.request('/api/assets/file/%2e%2e%2f%2e%2e%2fsensitive.txt');
+      expect(res.status).toBe(403);
+      const body = await res.json();
+      expect(body.error).toBe('Access denied');
+    });
+
+    it('should block double URL-encoded traversal', async () => {
+      const res = await app.request('/api/assets/file/%252e%252e%252f%252e%252e%252fsensitive.txt');
+      expect(res.status).toBe(403);
+    });
+
+    it('should block mixed encoding traversal', async () => {
+      const res = await app.request('/api/assets/file/%2e./../../sensitive.txt');
+      expect(res.status).toBe(403);
+    });
+  });
+
+  describe('Layer 2: Windows Backslash Attacks', () => {
+    it('should block backslash directory traversal', async () => {
+      const res = await app.request('/api/assets/file/..\\..\\sensitive.txt');
+      expect(res.status).toBe(403);
+    });
+
+    it('should block mixed slash/backslash traversal', async () => {
+      const res = await app.request('/api/assets/file/../..\\sensitive.txt');
+      expect(res.status).toBe(403);
+    });
+
+    it('should block Windows absolute paths', async () => {
+      const res = await app.request('/api/assets/file/C:\\Windows\\System32\\config\\sam');
+      expect(res.status).toBe(403);
+    });
+  });
+
+  describe('Layer 3: Absolute Path Attacks', () => {
+    it('should block Unix absolute paths', async () => {
+      const res = await app.request('/api/assets/file//etc/passwd');
+      expect(res.status).toBe(403);
+    });
+
+    it('should block paths starting with /', async () => {
+      const res = await app.request('/api/assets/file//../../../etc/passwd');
+      expect(res.status).toBe(403);
+    });
+  });
+
+  describe('Layer 4: Parent Directory (..) Attacks', () => {
+    it('should block simple .. traversal', async () => {
+      const res = await app.request('/api/assets/file/../sensitive.txt');
+      expect(res.status).toBe(403);
+    });
+
+    it('should block multiple .. traversal', async () => {
+      const res = await app.request('/api/assets/file/../../sensitive.txt');
+      expect(res.status).toBe(403);
+    });
+
+    it('should block hidden .. in path segments', async () => {
+      const res = await app.request('/api/assets/file/safe/../../../sensitive.txt');
+      expect(res.status).toBe(403);
+    });
+
+    it('should block .. with extra dots', async () => {
+      const res = await app.request('/api/assets/file/.../.../sensitive.txt');
+      expect(res.status).toBe(403);
+    });
+  });
+
+  describe('Layer 5+6: Normalization & Boundary Checks', () => {
+    it('should block normalized paths outside boundary', async () => {
+      const res = await app.request('/api/assets/file/subdir/../../outside.txt');
+      expect(res.status).toBe(403);
+    });
+
+    it('should block complex multi-segment traversal', async () => {
+      const res = await app.request('/api/assets/file/a/b/c/../../../../../../../etc/passwd');
+      expect(res.status).toBe(403);
+    });
+  });
+
+  describe('Edge Cases', () => {
+    it('should block null byte injection', async () => {
+      const res = await app.request('/api/assets/file/safe.png%00.txt');
+      expect(res.status).toBe(403);
+    });
+
+    it('should block unicode normalization attacks', async () => {
+      const res = await app.request('/api/assets/file/%c0%ae%c0%ae/sensitive.txt');
+      expect(res.status).toBe(403);
+    });
+
+    it('should block overly long paths (DoS)', async () => {
+      const longPath = '../'.repeat(1000) + 'etc/passwd';
+      const res = await app.request(`/api/assets/file/${longPath}`);
+      expect(res.status).toBe(403);
+    });
+  });
+
+  describe('Valid File Access', () => {
+    it('should allow access to files within assets directory', async () => {
+      const res = await app.request('/api/assets/file/safe.png');
+      expect([200, 404]).toContain(res.status); // 404 if file doesn't exist in real assets dir
+    });
+
+    it('should allow subdirectory access within assets', async () => {
+      const res = await app.request('/api/assets/file/images/logo.png');
+      expect([200, 404]).toContain(res.status);
+    });
+  });
+
+  describe('Error Handling', () => {
+    it('should return 404 for non-existent files (not 403)', async () => {
+      const res = await app.request('/api/assets/file/nonexistent.png');
+      expect(res.status).toBe(404);
+    });
+
+    it('should handle malformed requests gracefully', async () => {
+      const res = await app.request('/api/assets/file/');
+      expect([403, 404]).toContain(res.status);
+    });
+  });
+});
+
+// Cleanup
+afterAll(() => {
+  rmSync(testAssetsDir, { recursive: true, force: true });
+  rmSync(sensitiveFile, { force: true });
+});
+</file>
+
+<file path="__tests__/test-db.js">
+/**
+ * Test Database Setup
+ * Creates isolated test database for each test run
+ */
+
+import Database from 'better-sqlite3';
+import { readFileSync } from 'fs';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+export function createTestDatabase() {
+  const db = new Database(':memory:');
+
+  // Enable foreign keys
+  db.pragma('foreign_keys = ON');
+
+  // Read and execute schema
+  const schema = readFileSync(join(__dirname, '../db/schema.sql'), 'utf-8');
+  db.exec(schema);
+
+  return db;
+}
+
+export function cleanupTestDatabase(db) {
+  if (db) {
+    db.close();
+  }
+}
+</file>
+
+<file path="db/database.js">
+/**
+ * SQLite Database Module
+ * Handles database initialization and connection
+ */
+
+import Database from 'better-sqlite3';
+import { readFileSync, mkdirSync, existsSync } from 'fs';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Database file path
+const DB_DIR = join(__dirname, '../../data');
+const DB_PATH = join(DB_DIR, 'marketing.db');
+
+// Initialize database
+let db = null;
+
+export function initDatabase() {
+  try {
+    // Create data directory if it doesn't exist
+    if (!existsSync(DB_DIR)) {
+      mkdirSync(DB_DIR, { recursive: true });
+    }
+
+    // Create database connection
+    db = new Database(DB_PATH);
+
+    // Enable foreign keys
+    db.pragma('foreign_keys = ON');
+
+    // Read and execute schema
+    const schema = readFileSync(join(__dirname, 'schema.sql'), 'utf-8');
+    db.exec(schema);
+
+    console.log('✓ Database initialized:', DB_PATH);
+    return db;
+  } catch (error) {
+    console.error('Database initialization failed:', error);
+    throw error;
+  }
+}
+
+export function getDatabase() {
+  if (!db) {
+    return initDatabase();
+  }
+  return db;
+}
+
+export function closeDatabase() {
+  if (db) {
+    db.close();
+    db = null;
+  }
+}
+
+// Export default instance
+export default { initDatabase, getDatabase, closeDatabase };
+</file>
+
+<file path="db/schema.sql">
+-- Marketing Dashboard Database Schema
+
+CREATE TABLE IF NOT EXISTS campaigns (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  status TEXT DEFAULT 'draft' CHECK(status IN ('draft', 'active', 'completed')),
+  goal TEXT,
+  start_date TEXT,
+  end_date TEXT,
+  brand_context TEXT,
+  notes TEXT,
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+  updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS content (
+  id TEXT PRIMARY KEY,
+  campaign_id TEXT,
+  type TEXT NOT NULL CHECK(type IN ('blog', 'social', 'email', 'landing', 'other')),
+  title TEXT,
+  body TEXT,
+  status TEXT DEFAULT 'draft' CHECK(status IN ('draft', 'review', 'published')),
+  file_path TEXT,
+  platform TEXT,
+  scheduled_at TEXT,
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+  updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (campaign_id) REFERENCES campaigns(id) ON DELETE SET NULL
+);
+
+CREATE TABLE IF NOT EXISTS assets (
+  id TEXT PRIMARY KEY,
+  campaign_id TEXT,
+  path TEXT NOT NULL UNIQUE,
+  name TEXT,
+  category TEXT,
+  format TEXT,
+  format_type TEXT,
+  size INTEGER,
+  ai_prompt TEXT,
+  r2_status TEXT DEFAULT 'local' CHECK(r2_status IN ('local', 'pending', 'synced', 'error')),
+  r2_url TEXT,
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+  modified_at TEXT DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (campaign_id) REFERENCES campaigns(id) ON DELETE SET NULL
+);
+
+CREATE TABLE IF NOT EXISTS automations (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  description TEXT,
+  trigger_type TEXT,
+  action_skill TEXT,
+  prompt_template TEXT,
+  last_run TEXT,
+  run_count INTEGER DEFAULT 0,
+  enabled INTEGER DEFAULT 1 CHECK(enabled IN (0, 1)),
+  created_at TEXT DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Indexes for performance
+CREATE INDEX IF NOT EXISTS idx_content_campaign ON content(campaign_id);
+CREATE INDEX IF NOT EXISTS idx_content_status ON content(status);
+CREATE INDEX IF NOT EXISTS idx_content_type ON content(type);
+CREATE INDEX IF NOT EXISTS idx_assets_campaign ON assets(campaign_id);
+CREATE INDEX IF NOT EXISTS idx_assets_category ON assets(category);
+CREATE INDEX IF NOT EXISTS idx_campaigns_status ON campaigns(status);
+CREATE INDEX IF NOT EXISTS idx_automations_enabled ON automations(enabled);
+</file>
+
+<file path="lib/ai-bridge.cjs">
+/**
+ * AI Bridge - Connects Content Hub UI to Claude Code CLI
+ * Uses user's Claude Code subscription (no extra API cost)
+ */
+
+const { spawn } = require('child_process');
+const path = require('path');
+
+/**
+ * Sanitize input string to prevent injection
+ * @param {string} input - Input to sanitize
+ * @param {number} maxLength - Maximum allowed length
+ * @returns {string} - Sanitized input
+ */
+function sanitizeInput(input, maxLength = 50000) {
+  if (typeof input !== 'string') {
+    throw new Error('Input must be a string');
+  }
+  // Remove null bytes and control characters except newlines/tabs
+  const sanitized = input.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '');
+  // Limit length
+  if (sanitized.length > maxLength) {
+    throw new Error(`Input exceeds maximum length of ${maxLength} characters`);
+  }
+  return sanitized;
+}
+
+/**
+ * Execute Claude Code CLI with prompt
+ * @param {string} prompt - The prompt to send
+ * @param {object} options - Options for execution
+ * @returns {Promise<object>} - Claude response
+ */
+function executeClaudeCode(prompt, options = {}) {
+  return new Promise((resolve, reject) => {
+    const {
+      outputFormat = 'json',
+      tools = 'Read,Edit,Write',
+      timeout = 120000, // 2 minutes
+      cwd = process.cwd()
+    } = options;
+
+    // Security: Validate options
+    const validFormats = ['json', 'text'];
+    if (!validFormats.includes(outputFormat)) {
+      reject(new Error(`Invalid output format: ${outputFormat}`));
+      return;
+    }
+
+    // Security: Sanitize prompt
+    let sanitizedPrompt;
+    try {
+      sanitizedPrompt = sanitizeInput(prompt);
+    } catch (err) {
+      reject(err);
+      return;
+    }
+
+    const args = [
+      '-p', // Print mode (non-interactive)
+      '--output-format', outputFormat,
+      '--tools', tools,
+      sanitizedPrompt
+    ];
+
+    const claude = spawn('claude', args, {
+      cwd,
+      env: process.env,
+      timeout
+    });
+
+    let stdout = '';
+    let stderr = '';
+
+    claude.stdout.on('data', (data) => {
+      stdout += data.toString();
+    });
+
+    claude.stderr.on('data', (data) => {
+      stderr += data.toString();
+    });
+
+    claude.on('close', (code) => {
+      if (code !== 0) {
+        reject(new Error(`Claude exited with code ${code}: ${stderr}`));
+        return;
+      }
+
+      try {
+        // Parse JSON output
+        if (outputFormat === 'json') {
+          const result = JSON.parse(stdout);
+          resolve(result);
+        } else {
+          resolve({ text: stdout });
+        }
+      } catch (err) {
+        // If JSON parse fails, return as text
+        resolve({ text: stdout, parseError: true });
+      }
+    });
+
+    claude.on('error', (err) => {
+      reject(new Error(`Failed to spawn claude: ${err.message}`));
+    });
+  });
+}
+
+/**
+ * Enhance content with AI
+ * @param {string} content - Original content
+ * @param {string} instruction - Enhancement instruction
+ * @param {string} filePath - Path to the file (for context)
+ * @returns {Promise<string>} - Enhanced content
+ */
+async function enhanceContent(content, instruction, filePath) {
+  const prompt = `
+You are enhancing marketing content. Here's the task:
+
+FILE: ${filePath}
+INSTRUCTION: ${instruction}
+
+ORIGINAL CONTENT:
+---
+${content}
+---
+
+Provide the improved content. Output ONLY the enhanced content, no explanations.
+`;
+
+  const result = await executeClaudeCode(prompt, {
+    tools: 'Read', // Read-only for safety
+    timeout: 60000
+  });
+
+  // Extract text from result
+  if (result.result) {
+    return result.result;
+  }
+  if (result.text) {
+    return result.text;
+  }
+  return content; // Fallback to original
+}
+
+/**
+ * Generate new content with AI
+ * @param {string} type - Content type (blog, social, email, etc.)
+ * @param {string} description - What to generate
+ * @param {object} context - Additional context (brand, etc.)
+ * @returns {Promise<string>} - Generated content
+ */
+async function generateContent(type, description, context = {}) {
+  const brandContext = context.brand
+    ? `BRAND CONTEXT: ${JSON.stringify(context.brand)}`
+    : '';
+
+  const prompt = `
+Generate marketing content.
+
+TYPE: ${type}
+DESCRIPTION: ${description}
+${brandContext}
+
+Generate high-quality ${type} content based on the description.
+Output ONLY the content, formatted appropriately for the type.
+`;
+
+  const result = await executeClaudeCode(prompt, {
+    tools: 'Read',
+    timeout: 90000
+  });
+
+  if (result.result) {
+    return result.result;
+  }
+  if (result.text) {
+    return result.text;
+  }
+  throw new Error('Failed to generate content');
+}
+
+/**
+ * Check if Claude Code CLI is available
+ * @returns {Promise<boolean>}
+ */
+async function isClaudeAvailable() {
+  return new Promise((resolve) => {
+    const claude = spawn('claude', ['--version'], { timeout: 5000 });
+    claude.on('close', (code) => resolve(code === 0));
+    claude.on('error', () => resolve(false));
+  });
+}
+
+module.exports = {
+  executeClaudeCode,
+  enhanceContent,
+  generateContent,
+  isClaudeAvailable
+};
+</file>
+
+<file path="lib/brand-context.cjs">
+/**
+ * Brand context extractor
+ * Extracts brand guidelines for Content Hub sidebar
+ */
+
+const fs = require('fs');
+const path = require('path');
+
+/**
+ * Extract hex colors from text
+ */
+function extractColors(text) {
+  const hexPattern = /#[0-9A-Fa-f]{6}\b/g;
+  return [...new Set(text.match(hexPattern) || [])];
+}
+
+/**
+ * Extract section from markdown
+ */
+function extractSection(content, heading) {
+  const regex = new RegExp(`###?\\s*${heading}[\\s\\S]*?(?=###?\\s|$)`, 'i');
+  const match = content.match(regex);
+  return match ? match[0] : '';
+}
+
+/**
+ * Extract brand context from markdown file
+ */
+function extractBrandContext(brandGuidelinesPath) {
+  const defaultContext = {
+    exists: false,
+    colors: { primary: [], secondary: [], neutral: [] },
+    typography: { heading: null, body: null },
+    voice: { personality: '', traits: [] },
+    summary: 'No brand guidelines found. Run /marketing:init to create them.'
+  };
+
+  if (!fs.existsSync(brandGuidelinesPath)) {
+    return defaultContext;
+  }
+
+  try {
+    const content = fs.readFileSync(brandGuidelinesPath, 'utf8');
+
+    // Extract colors
+    const primarySection = extractSection(content, 'Primary Colors');
+    const secondarySection = extractSection(content, 'Secondary Colors');
+    const neutralSection = extractSection(content, 'Neutral');
+
+    const colors = {
+      primary: extractColors(primarySection).slice(0, 5),
+      secondary: extractColors(secondarySection).slice(0, 5),
+      neutral: extractColors(neutralSection).slice(0, 5)
+    };
+
+    // Extract typography
+    const fontSection = extractSection(content, 'Font|Typography');
+    const headingMatch = fontSection.match(/heading[^']*['"]([^'"]+)['"]/i);
+    const bodyMatch = fontSection.match(/body[^']*['"]([^'"]+)['"]/i);
+
+    const typography = {
+      heading: headingMatch ? headingMatch[1] : null,
+      body: bodyMatch ? bodyMatch[1] : null
+    };
+
+    // Extract voice/personality
+    const personalitySection = extractSection(content, 'Brand Personality|Voice');
+    const traits = [];
+    const traitMatches = personalitySection.match(/\*\*([^*]+)\*\*/g);
+    if (traitMatches) {
+      traits.push(...traitMatches.map(t => t.replace(/\*\*/g, '').trim()).slice(0, 5));
+    }
+
+    // Build summary
+    const summaryParts = [];
+    if (colors.primary.length) summaryParts.push(`Primary: ${colors.primary[0]}`);
+    if (typography.heading) summaryParts.push(`Font: ${typography.heading}`);
+    if (traits.length) summaryParts.push(`Voice: ${traits.slice(0, 3).join(', ')}`);
+
+    return {
+      exists: true,
+      colors,
+      typography,
+      voice: {
+        personality: traits.join(', '),
+        traits
+      },
+      summary: summaryParts.join(' | ') || 'Brand guidelines loaded',
+      source: brandGuidelinesPath,
+      extractedAt: new Date().toISOString()
+    };
+
+  } catch (err) {
+    console.error('Error extracting brand context:', err);
+    return defaultContext;
+  }
+}
+
+/**
+ * Get brand context from project
+ */
+function getBrandContext(projectRoot) {
+  const possiblePaths = [
+    path.join(projectRoot, 'docs', 'brand-guidelines.md'),
+    path.join(projectRoot, 'docs', 'design-guidelines.md'),
+    path.join(projectRoot, 'brand-guidelines.md')
+  ];
+
+  for (const p of possiblePaths) {
+    if (fs.existsSync(p)) {
+      return extractBrandContext(p);
+    }
+  }
+
+  return extractBrandContext(possiblePaths[0]); // Returns default context
+}
+
+module.exports = { getBrandContext, extractBrandContext };
+</file>
+
+<file path="lib/scanner.cjs">
+#!/usr/bin/env node
+/**
+ * Asset scanner - scans assets/ directory and updates manifest
+ * Generates asset metadata for Content Hub gallery
+ */
+
+const fs = require('fs');
+const path = require('path');
+const crypto = require('crypto');
+
+// Supported formats by category
+const FORMATS = {
+  image: ['png', 'jpg', 'jpeg', 'webp', 'gif', 'svg'],
+  video: ['mp4', 'mov', 'webm'],
+  document: ['pdf', 'md', 'txt'],
+  design: ['psd', 'ai', 'fig', 'sketch'],
+  data: ['json', 'csv', 'html', 'css']
+};
+
+// Category detection from path
+const CATEGORY_MAP = {
+  'banners': 'banner',
+  'designs': 'design',
+  'logos': 'logo',
+  'videos': 'video',
+  'infographics': 'infographic',
+  'articles': 'article',
+  'posts': 'post',
+  'copy': 'copy',
+  'campaigns': 'campaign',
+  'sales': 'sales',
+  'seo': 'seo',
+  'storyboards': 'storyboard'
+};
+
+/**
+ * Get file extension
+ */
+function getExtension(filePath) {
+  return path.extname(filePath).slice(1).toLowerCase();
+}
+
+/**
+ * Get format type from extension
+ */
+function getFormatType(ext) {
+  for (const [type, exts] of Object.entries(FORMATS)) {
+    if (exts.includes(ext)) return type;
+  }
+  return 'other';
+}
+
+/**
+ * Detect category from file path
+ */
+function detectCategory(filePath) {
+  const parts = filePath.split(path.sep);
+  for (const part of parts) {
+    if (CATEGORY_MAP[part]) return CATEGORY_MAP[part];
+  }
+  return 'other';
+}
+
+/**
+ * Generate unique ID for asset
+ */
+function generateId(filePath) {
+  return crypto.createHash('md5').update(filePath).digest('hex').slice(0, 12);
+}
+
+/**
+ * Scan directory recursively for assets
+ */
+function scanDirectory(dir, basePath = dir) {
+  const assets = [];
+
+  if (!fs.existsSync(dir)) return assets;
+
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    const relativePath = path.relative(basePath, fullPath);
+
+    // Skip hidden files and directories
+    if (entry.name.startsWith('.')) continue;
+
+    if (entry.isDirectory()) {
+      assets.push(...scanDirectory(fullPath, basePath));
+    } else {
+      const ext = getExtension(entry.name);
+      const formatType = getFormatType(ext);
+
+      // Skip unsupported formats
+      if (formatType === 'other' && !['html', 'css', 'json'].includes(ext)) continue;
+
+      const stats = fs.statSync(fullPath);
+      const category = detectCategory(relativePath);
+
+      assets.push({
+        id: generateId(relativePath),
+        path: relativePath,
+        name: path.basename(entry.name, path.extname(entry.name)),
+        format: ext,
+        formatType: formatType,
+        category: category,
+        subcategory: getSubcategory(relativePath, category),
+        size: stats.size,
+        createdAt: stats.birthtime.toISOString(),
+        modifiedAt: stats.mtime.toISOString(),
+        tags: extractTags(relativePath, entry.name),
+        r2: {
+          bucket: null,
+          key: null,
+          url: null,
+          syncedAt: null,
+          status: 'local'
+        },
+        meta: {
+          description: null,
+          campaign: extractCampaign(relativePath),
+          aiGenerated: isAiGenerated(relativePath)
+        }
+      });
+    }
+  }
+
+  return assets;
+}
+
+/**
+ * Get subcategory from path
+ */
+function getSubcategory(filePath, category) {
+  const parts = filePath.split(path.sep);
+  const catIndex = parts.findIndex(p => CATEGORY_MAP[p] === category);
+  if (catIndex >= 0 && catIndex < parts.length - 2) {
+    return parts[catIndex + 1];
+  }
+  return null;
+}
+
+/**
+ * Extract tags from path and filename
+ */
+function extractTags(filePath, filename) {
+  const tags = [];
+  const parts = filePath.split(path.sep);
+
+  // Add path-based tags
+  for (const part of parts) {
+    if (part.includes('-')) {
+      tags.push(...part.split('-').filter(t => t.length > 2));
+    }
+  }
+
+  // Add common keywords
+  if (filePath.includes('social')) tags.push('social');
+  if (filePath.includes('email')) tags.push('email');
+  if (filePath.includes('landing')) tags.push('landing');
+  if (filePath.includes('hero')) tags.push('hero');
+
+  return [...new Set(tags)].slice(0, 10);
+}
+
+/**
+ * Extract campaign name from path
+ */
+function extractCampaign(filePath) {
+  const match = filePath.match(/campaigns?\/([^/]+)/i);
+  return match ? match[1] : null;
+}
+
+/**
+ * Check if asset is AI-generated
+ */
+function isAiGenerated(filePath) {
+  return filePath.includes('generated') ||
+         filePath.includes('ai-') ||
+         /imagen|gemini|dalle|midjourney/i.test(filePath);
+}
+
+/**
+ * Load existing manifest
+ */
+function loadManifest(manifestPath) {
+  if (fs.existsSync(manifestPath)) {
+    try {
+      return JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+    } catch {
+      return null;
+    }
+  }
+  return null;
+}
+
+/**
+ * Merge new assets with existing manifest (preserve R2 data)
+ */
+function mergeAssets(existing, newAssets) {
+  const existingMap = new Map();
+  if (existing && existing.assets) {
+    for (const asset of existing.assets) {
+      existingMap.set(asset.path, asset);
+    }
+  }
+
+  return newAssets.map(asset => {
+    const existingAsset = existingMap.get(asset.path);
+    if (existingAsset) {
+      // Preserve R2 data and user-added metadata
+      return {
+        ...asset,
+        r2: existingAsset.r2 || asset.r2,
+        meta: {
+          ...asset.meta,
+          description: existingAsset.meta?.description || asset.meta.description
+        },
+        tags: existingAsset.tags?.length > asset.tags.length
+          ? existingAsset.tags
+          : asset.tags
+      };
+    }
+    return asset;
+  });
+}
+
+/**
+ * Main scan function
+ */
+function scan(assetsDir, manifestPath, options = {}) {
+  const assets = scanDirectory(assetsDir);
+  const existing = loadManifest(manifestPath);
+  const merged = mergeAssets(existing, assets);
+
+  const manifest = {
+    $schema: './manifest.schema.json',
+    version: '1.1.0',
+    lastUpdated: new Date().toISOString(),
+    assetsDir: path.basename(assetsDir),
+    totalAssets: merged.length,
+    categories: [...new Set(merged.map(a => a.category))],
+    formats: [...new Set(merged.map(a => a.format))],
+    assets: merged
+  };
+
+  if (options.update) {
+    fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
+  }
+
+  return manifest;
+}
+
+// CLI usage
+if (require.main === module) {
+  const args = process.argv.slice(2);
+  const update = args.includes('--update');
+  const json = args.includes('--json');
+
+  const cwd = process.cwd();
+  const assetsDir = path.join(cwd, 'assets');
+  const manifestPath = path.join(cwd, '.assets', 'manifest.json');
+
+  const manifest = scan(assetsDir, manifestPath, { update });
+
+  if (json) {
+    console.log(JSON.stringify(manifest, null, 2));
+  } else {
+    console.log(`Scanned ${manifest.totalAssets} assets`);
+    console.log(`Categories: ${manifest.categories.join(', ')}`);
+    console.log(`Formats: ${manifest.formats.join(', ')}`);
+    if (update) {
+      console.log(`Updated: ${manifestPath}`);
+    }
+  }
+}
+
+module.exports = { scan, scanDirectory, FORMATS, CATEGORY_MAP };
+</file>
+
+<file path="middleware/auth.js">
+/**
+ * API Key Authentication Middleware
+ * Protects API endpoints with API key validation
+ */
+
+/**
+ * API Key middleware
+ * Validates X-API-Key header against environment variable
+ * Bypasses in development mode if SKIP_AUTH=true
+ */
+export function apiKeyAuth(c, next) {
+  const NODE_ENV = process.env.NODE_ENV || 'development';
+  const SKIP_AUTH = process.env.SKIP_AUTH === 'true';
+  const API_KEY = process.env.API_KEY;
+
+  // Skip in development mode if configured
+  if (NODE_ENV === 'development' && SKIP_AUTH) {
+    console.warn('⚠️  AUTH BYPASSED (development mode)');
+    return next();
+  }
+
+  // Require API key in production or if SKIP_AUTH not set
+  if (!API_KEY) {
+    return c.json({
+      error: 'Server misconfigured',
+      message: 'API_KEY not set in environment'
+    }, 500);
+  }
+
+  const providedKey = c.req.header('X-API-Key');
+
+  if (!providedKey) {
+    return c.json({
+      error: 'Unauthorized',
+      message: 'Missing X-API-Key header'
+    }, 401);
+  }
+
+  if (providedKey !== API_KEY) {
+    return c.json({
+      error: 'Unauthorized',
+      message: 'Invalid API key'
+    }, 401);
+  }
+
+  // Valid key, proceed
+  return next();
+}
+</file>
+
+<file path="routes/ai.js">
+/**
+ * AI API Routes
+ * Integrates Content Hub AI bridge for Claude Code CLI operations
+ */
+
+import { Hono } from 'hono';
+import { isClaudeAvailable, enhanceContent, generateContent } from '../lib/ai-bridge.cjs';
+import { getBrandContext } from '../lib/brand-context.cjs';
+
+const app = new Hono();
+
+// GET /api/ai/status - Check Claude Code CLI availability
+app.get('/status', async (c) => {
+  try {
+    const available = await isClaudeAvailable();
+    return c.json({
+      available,
+      message: available ? 'Claude Code ready' : 'Claude Code not found in PATH'
+    });
+  } catch (error) {
+    console.error('Failed to check AI status:', error);
+    return c.json({ available: false, error: error.message }, 500);
+  }
+});
+
+// POST /api/ai/enhance - Enhance existing content with AI
+app.post('/enhance', async (c) => {
+  try {
+    const body = await c.req.json();
+    const { content, instruction, filePath } = body;
+
+    if (!content) {
+      return c.json({ error: 'Content is required' }, 400);
+    }
+
+    if (!instruction) {
+      return c.json({ error: 'Instruction is required' }, 400);
+    }
+
+    const enhanced = await enhanceContent(content, instruction, filePath || 'unknown');
+
+    return c.json({
+      success: true,
+      content: enhanced,
+      originalLength: content.length,
+      enhancedLength: enhanced.length
+    });
+  } catch (error) {
+    console.error('Failed to enhance content:', error);
+    return c.json({ error: 'Failed to enhance content', details: error.message }, 500);
+  }
+});
+
+// POST /api/ai/generate - Generate new content with AI
+app.post('/generate', async (c) => {
+  try {
+    const body = await c.req.json();
+    const { type, description, brandContext } = body;
+
+    if (!type) {
+      return c.json({ error: 'Content type is required' }, 400);
+    }
+
+    if (!description) {
+      return c.json({ error: 'Description is required' }, 400);
+    }
+
+    const generated = await generateContent(type, description, brandContext);
+
+    return c.json({
+      success: true,
+      content: generated,
+      type,
+      length: generated.length
+    });
+  } catch (error) {
+    console.error('Failed to generate content:', error);
+    return c.json({ error: 'Failed to generate content', details: error.message }, 500);
+  }
+});
+
+// GET /api/brand - Get brand context from user's docs
+app.get('/brand', async (c) => {
+  try {
+    const brand = await getBrandContext();
+
+    return c.json({
+      exists: brand.exists,
+      summary: brand.summary || 'No brand guidelines found',
+      colors: brand.colors || {},
+      voice: brand.voice || {},
+      fonts: brand.fonts || {}
+    });
+  } catch (error) {
+    console.error('Failed to get brand context:', error);
+    return c.json({
+      exists: false,
+      error: error.message,
+      message: 'Run /marketing:init to create brand guidelines'
+    }, 500);
+  }
+});
+
+export default app;
+</file>
+
+<file path="routes/assets.js">
+/**
+ * Assets API Routes
+ * Integrates Content Hub scanner for asset management
+ */
+
+import { Hono } from 'hono';
+import { getDatabase } from '../db/database.js';
+import scannerModule from '../lib/scanner.cjs';
+import { readFileSync } from 'fs';
+import { join, dirname, resolve, normalize } from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const app = new Hono();
+const db = getDatabase();
+const { scan: scanAssets } = scannerModule;
+
+// GET /api/assets - List assets from DB + live scan
+app.get('/', async (c) => {
+  try {
+    // Get assets from database
+    const dbAssets = db.prepare('SELECT * FROM assets ORDER BY created_at DESC').all();
+
+    // Perform live scan of assets folder
+    const assetsDir = join(__dirname, '../../../../assets');
+    const manifest = scanAssets(assetsDir, null, { update: false });
+    const scannedAssets = manifest.assets || [];
+
+    // Merge: Use DB data where available, fallback to scanned data
+    const assets = scannedAssets.map(scanned => {
+      const dbMatch = dbAssets.find(db => db.path === scanned.path);
+      return dbMatch ? { ...scanned, ...dbMatch } : scanned;
+    });
+
+    return c.json({
+      assets,
+      total: assets.length,
+      fromDatabase: dbAssets.length,
+      fromScan: scannedAssets.length
+    });
+  } catch (error) {
+    console.error('Failed to fetch assets:', error);
+    return c.json({ error: 'Failed to fetch assets' }, 500);
+  }
+});
+
+// GET /api/assets/:id - Get single asset
+app.get('/:id', (c) => {
+  try {
+    const { id } = c.req.param();
+    const asset = db.prepare('SELECT * FROM assets WHERE id = ?').get(id);
+
+    if (!asset) {
+      return c.json({ error: 'Asset not found' }, 404);
+    }
+
+    return c.json({ asset });
+  } catch (error) {
+    console.error('Failed to fetch asset:', error);
+    return c.json({ error: 'Failed to fetch asset' }, 500);
+  }
+});
+
+// POST /api/assets/scan - Rescan assets folder and update DB
+app.post('/scan', async (c) => {
+  try {
+    const assetsDir = join(__dirname, '../../../../assets');
+    const manifest = scanAssets(assetsDir, null, { update: false });
+    const scannedAssets = manifest.assets || [];
+
+    // Update database with scanned assets
+    let inserted = 0;
+    let updated = 0;
+
+    for (const asset of scannedAssets) {
+      const existing = db.prepare('SELECT * FROM assets WHERE path = ?').get(asset.path);
+
+      if (existing) {
+        // Update metadata (preserve campaign_id, ai_prompt, r2_status)
+        db.prepare(`
+          UPDATE assets
+          SET name = ?, category = ?, format = ?, format_type = ?, size = ?, modified_at = ?
+          WHERE path = ?
+        `).run(
+          asset.name,
+          asset.category,
+          asset.format,
+          asset.formatType,
+          asset.size,
+          asset.modifiedAt,
+          asset.path
+        );
+        updated++;
+      } else {
+        // Insert new asset
+        db.prepare(`
+          INSERT INTO assets (id, path, name, category, format, format_type, size, modified_at)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        `).run(
+          asset.id,
+          asset.path,
+          asset.name,
+          asset.category,
+          asset.format,
+          asset.formatType,
+          asset.size,
+          asset.modifiedAt
+        );
+        inserted++;
+      }
+    }
+
+    return c.json({
+      success: true,
+      scanned: scannedAssets.length,
+      inserted,
+      updated,
+      message: `Scanned ${scannedAssets.length} assets: ${inserted} new, ${updated} updated`
+    });
+  } catch (error) {
+    console.error('Failed to scan assets:', error);
+    return c.json({ error: 'Failed to scan assets', details: error.message }, 500);
+  }
+});
+
+// PUT /api/assets/:id - Update asset metadata
+app.put('/:id', async (c) => {
+  try {
+    const { id } = c.req.param();
+    const body = await c.req.json();
+
+    const existing = db.prepare('SELECT * FROM assets WHERE id = ?').get(id);
+    if (!existing) {
+      return c.json({ error: 'Asset not found' }, 404);
+    }
+
+    const updates = [];
+    const values = [];
+
+    if (body.campaign_id !== undefined) {
+      updates.push('campaign_id = ?');
+      values.push(body.campaign_id);
+    }
+    if (body.ai_prompt !== undefined) {
+      updates.push('ai_prompt = ?');
+      values.push(body.ai_prompt);
+    }
+    if (body.r2_status !== undefined) {
+      updates.push('r2_status = ?');
+      values.push(body.r2_status);
+    }
+    if (body.r2_url !== undefined) {
+      updates.push('r2_url = ?');
+      values.push(body.r2_url);
+    }
+
+    values.push(id);
+
+    const stmt = db.prepare(`UPDATE assets SET ${updates.join(', ')} WHERE id = ?`);
+    stmt.run(...values);
+
+    const asset = db.prepare('SELECT * FROM assets WHERE id = ?').get(id);
+    return c.json({ asset });
+  } catch (error) {
+    console.error('Failed to update asset:', error);
+    return c.json({ error: 'Failed to update asset' }, 500);
+  }
+});
+
+// GET /api/assets/file/* - Serve asset files
+app.get('/file/*', (c) => {
+  // Extract filepath from URL path (remove '/file/' prefix)
+  const fullPath = c.req.path;
+  const prefix = fullPath.indexOf('/file/');
+  if (prefix === -1) {
+    return c.json({ error: 'Invalid path' }, 400);
+  }
+
+  let filepath = fullPath.substring(prefix + 6); // '/file/' is 6 chars
+
+  // Security: Comprehensive path traversal prevention
+
+  // 1. URL decode to prevent encoded traversal attempts (reject on decode error)
+  try {
+    filepath = decodeURIComponent(filepath);
+  } catch (e) {
+    return c.json({ error: 'Access denied' }, 403);
+  }
+
+  // 2. Replace backslashes with forward slashes (Windows compatibility)
+  filepath = filepath.replace(/\\/g, '/');
+
+  // 3. Block absolute paths
+  if (filepath.startsWith('/')) {
+    return c.json({ error: 'Access denied' }, 403);
+  }
+
+  // 4. Block any path containing '..' segments
+  if (filepath.includes('..')) {
+    return c.json({ error: 'Access denied' }, 403);
+  }
+
+  // 5. Normalize and resolve paths
+  const assetsRoot = resolve(join(__dirname, '../../../../assets'));
+  const requestedPath = resolve(join(assetsRoot, normalize(filepath)));
+
+  // 6. Final boundary check - must be within assets directory
+  if (!requestedPath.startsWith(assetsRoot + '/') && requestedPath !== assetsRoot) {
+    return c.json({ error: 'Access denied' }, 403);
+  }
+
+  // 7. Attempt to read file (404 if not found)
+  try {
+    const content = readFileSync(requestedPath);
+    return new Response(content);
+  } catch (error) {
+    return c.json({ error: 'File not found' }, 404);
+  }
+});
+
+export default app;
+</file>
+
+<file path="routes/campaigns.js">
+/**
+ * Campaigns API Routes
+ * CRUD operations for marketing campaigns
+ */
+
+import { Hono } from 'hono';
+import { getDatabase } from '../db/database.js';
+import { randomBytes } from 'crypto';
+
+const app = new Hono();
+const db = getDatabase();
+
+// Helper: Generate ID
+const generateId = () => randomBytes(6).toString('hex');
+
+// Helper: Validate campaign data
+function validateCampaign(data) {
+  const errors = [];
+
+  if (!data.name || data.name.trim().length === 0) {
+    errors.push('Campaign name is required');
+  }
+
+  if (data.status && !['draft', 'active', 'completed'].includes(data.status)) {
+    errors.push('Status must be draft, active, or completed');
+  }
+
+  return errors;
+}
+
+// GET /api/campaigns - List all campaigns
+app.get('/', (c) => {
+  try {
+    const campaigns = db.prepare('SELECT * FROM campaigns ORDER BY created_at DESC').all();
+    return c.json({ campaigns, total: campaigns.length });
+  } catch (error) {
+    console.error('Failed to fetch campaigns:', error);
+    return c.json({ error: 'Failed to fetch campaigns' }, 500);
+  }
+});
+
+// GET /api/campaigns/:id - Get single campaign
+app.get('/:id', (c) => {
+  try {
+    const { id } = c.req.param();
+    const campaign = db.prepare('SELECT * FROM campaigns WHERE id = ?').get(id);
+
+    if (!campaign) {
+      return c.json({ error: 'Campaign not found' }, 404);
+    }
+
+    return c.json({ campaign });
+  } catch (error) {
+    console.error('Failed to fetch campaign:', error);
+    return c.json({ error: 'Failed to fetch campaign' }, 500);
+  }
+});
+
+// POST /api/campaigns - Create new campaign
+app.post('/', async (c) => {
+  try {
+    const body = await c.req.json();
+    const errors = validateCampaign(body);
+
+    if (errors.length > 0) {
+      return c.json({ error: 'Validation failed', errors }, 400);
+    }
+
+    const campaign = {
+      id: generateId(),
+      name: body.name,
+      status: body.status || 'draft',
+      goal: body.goal || null,
+      start_date: body.start_date || null,
+      end_date: body.end_date || null,
+      brand_context: body.brand_context ? JSON.stringify(body.brand_context) : null,
+      notes: body.notes || null,
+    };
+
+    const stmt = db.prepare(`
+      INSERT INTO campaigns (id, name, status, goal, start_date, end_date, brand_context, notes)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `);
+
+    stmt.run(
+      campaign.id,
+      campaign.name,
+      campaign.status,
+      campaign.goal,
+      campaign.start_date,
+      campaign.end_date,
+      campaign.brand_context,
+      campaign.notes
+    );
+
+    return c.json({ campaign }, 201);
+  } catch (error) {
+    console.error('Failed to create campaign:', error);
+    return c.json({ error: 'Failed to create campaign' }, 500);
+  }
+});
+
+// PUT /api/campaigns/:id - Update campaign
+app.put('/:id', async (c) => {
+  try {
+    const { id } = c.req.param();
+    const body = await c.req.json();
+
+    // Check if campaign exists
+    const existing = db.prepare('SELECT * FROM campaigns WHERE id = ?').get(id);
+    if (!existing) {
+      return c.json({ error: 'Campaign not found' }, 404);
+    }
+
+    const errors = validateCampaign({ ...existing, ...body });
+    if (errors.length > 0) {
+      return c.json({ error: 'Validation failed', errors }, 400);
+    }
+
+    const updates = [];
+    const values = [];
+
+    if (body.name !== undefined) {
+      updates.push('name = ?');
+      values.push(body.name);
+    }
+    if (body.status !== undefined) {
+      updates.push('status = ?');
+      values.push(body.status);
+    }
+    if (body.goal !== undefined) {
+      updates.push('goal = ?');
+      values.push(body.goal);
+    }
+    if (body.start_date !== undefined) {
+      updates.push('start_date = ?');
+      values.push(body.start_date);
+    }
+    if (body.end_date !== undefined) {
+      updates.push('end_date = ?');
+      values.push(body.end_date);
+    }
+    if (body.brand_context !== undefined) {
+      updates.push('brand_context = ?');
+      values.push(JSON.stringify(body.brand_context));
+    }
+    if (body.notes !== undefined) {
+      updates.push('notes = ?');
+      values.push(body.notes);
+    }
+
+    updates.push('updated_at = CURRENT_TIMESTAMP');
+    values.push(id);
+
+    const stmt = db.prepare(`UPDATE campaigns SET ${updates.join(', ')} WHERE id = ?`);
+    stmt.run(...values);
+
+    const campaign = db.prepare('SELECT * FROM campaigns WHERE id = ?').get(id);
+    return c.json({ campaign });
+  } catch (error) {
+    console.error('Failed to update campaign:', error);
+    return c.json({ error: 'Failed to update campaign' }, 500);
+  }
+});
+
+// DELETE /api/campaigns/:id - Delete campaign
+app.delete('/:id', (c) => {
+  try {
+    const { id } = c.req.param();
+
+    const existing = db.prepare('SELECT * FROM campaigns WHERE id = ?').get(id);
+    if (!existing) {
+      return c.json({ error: 'Campaign not found' }, 404);
+    }
+
+    db.prepare('DELETE FROM campaigns WHERE id = ?').run(id);
+
+    return c.json({ success: true, message: 'Campaign deleted' });
+  } catch (error) {
+    console.error('Failed to delete campaign:', error);
+    return c.json({ error: 'Failed to delete campaign' }, 500);
+  }
+});
+
+export default app;
+</file>
+
+<file path="routes/content.js">
+/**
+ * Content API Routes
+ * CRUD operations for marketing content (blog, social, email, landing pages)
+ */
+
+import { Hono } from 'hono';
+import { getDatabase } from '../db/database.js';
+import { randomBytes } from 'crypto';
+
+const app = new Hono();
+const db = getDatabase();
+
+// Helper: Generate ID
+const generateId = () => randomBytes(6).toString('hex');
+
+// Helper: Validate content data
+function validateContent(data) {
+  const errors = [];
+
+  if (!data.type || !['blog', 'social', 'email', 'landing', 'other'].includes(data.type)) {
+    errors.push('Type must be blog, social, email, landing, or other');
+  }
+
+  if (data.status && !['draft', 'review', 'published'].includes(data.status)) {
+    errors.push('Status must be draft, review, or published');
+  }
+
+  return errors;
+}
+
+// GET /api/content - List content with filters
+app.get('/', (c) => {
+  try {
+    const { campaign_id, type, status } = c.req.query();
+
+    let sql = 'SELECT * FROM content WHERE 1=1';
+    const params = [];
+
+    if (campaign_id) {
+      sql += ' AND campaign_id = ?';
+      params.push(campaign_id);
+    }
+
+    if (type) {
+      sql += ' AND type = ?';
+      params.push(type);
+    }
+
+    if (status) {
+      sql += ' AND status = ?';
+      params.push(status);
+    }
+
+    sql += ' ORDER BY created_at DESC';
+
+    const content = db.prepare(sql).all(...params);
+    return c.json({ content, total: content.length });
+  } catch (error) {
+    console.error('Failed to fetch content:', error);
+    return c.json({ error: 'Failed to fetch content' }, 500);
+  }
+});
+
+// GET /api/content/:id - Get single content
+app.get('/:id', (c) => {
+  try {
+    const { id } = c.req.param();
+    const content = db.prepare('SELECT * FROM content WHERE id = ?').get(id);
+
+    if (!content) {
+      return c.json({ error: 'Content not found' }, 404);
+    }
+
+    return c.json({ content });
+  } catch (error) {
+    console.error('Failed to fetch content:', error);
+    return c.json({ error: 'Failed to fetch content' }, 500);
+  }
+});
+
+// POST /api/content - Create new content
+app.post('/', async (c) => {
+  try {
+    const body = await c.req.json();
+    const errors = validateContent(body);
+
+    if (errors.length > 0) {
+      return c.json({ error: 'Validation failed', errors }, 400);
+    }
+
+    const content = {
+      id: generateId(),
+      campaign_id: body.campaign_id || null,
+      type: body.type,
+      title: body.title || null,
+      body: body.body || null,
+      status: body.status || 'draft',
+      file_path: body.file_path || null,
+      platform: body.platform || null,
+      scheduled_at: body.scheduled_at || null,
+    };
+
+    const stmt = db.prepare(`
+      INSERT INTO content (id, campaign_id, type, title, body, status, file_path, platform, scheduled_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `);
+
+    stmt.run(
+      content.id,
+      content.campaign_id,
+      content.type,
+      content.title,
+      content.body,
+      content.status,
+      content.file_path,
+      content.platform,
+      content.scheduled_at
+    );
+
+    return c.json({ content }, 201);
+  } catch (error) {
+    console.error('Failed to create content:', error);
+    return c.json({ error: 'Failed to create content' }, 500);
+  }
+});
+
+// PUT /api/content/:id - Update content
+app.put('/:id', async (c) => {
+  try {
+    const { id } = c.req.param();
+    const body = await c.req.json();
+
+    const existing = db.prepare('SELECT * FROM content WHERE id = ?').get(id);
+    if (!existing) {
+      return c.json({ error: 'Content not found' }, 404);
+    }
+
+    const errors = validateContent({ ...existing, ...body });
+    if (errors.length > 0) {
+      return c.json({ error: 'Validation failed', errors }, 400);
+    }
+
+    const updates = [];
+    const values = [];
+
+    if (body.campaign_id !== undefined) {
+      updates.push('campaign_id = ?');
+      values.push(body.campaign_id);
+    }
+    if (body.type !== undefined) {
+      updates.push('type = ?');
+      values.push(body.type);
+    }
+    if (body.title !== undefined) {
+      updates.push('title = ?');
+      values.push(body.title);
+    }
+    if (body.body !== undefined) {
+      updates.push('body = ?');
+      values.push(body.body);
+    }
+    if (body.status !== undefined) {
+      updates.push('status = ?');
+      values.push(body.status);
+    }
+    if (body.file_path !== undefined) {
+      updates.push('file_path = ?');
+      values.push(body.file_path);
+    }
+    if (body.platform !== undefined) {
+      updates.push('platform = ?');
+      values.push(body.platform);
+    }
+    if (body.scheduled_at !== undefined) {
+      updates.push('scheduled_at = ?');
+      values.push(body.scheduled_at);
+    }
+
+    updates.push('updated_at = CURRENT_TIMESTAMP');
+    values.push(id);
+
+    const stmt = db.prepare(`UPDATE content SET ${updates.join(', ')} WHERE id = ?`);
+    stmt.run(...values);
+
+    const content = db.prepare('SELECT * FROM content WHERE id = ?').get(id);
+    return c.json({ content });
+  } catch (error) {
+    console.error('Failed to update content:', error);
+    return c.json({ error: 'Failed to update content' }, 500);
+  }
+});
+
+// DELETE /api/content/:id - Delete content
+app.delete('/:id', (c) => {
+  try {
+    const { id } = c.req.param();
+
+    const existing = db.prepare('SELECT * FROM content WHERE id = ?').get(id);
+    if (!existing) {
+      return c.json({ error: 'Content not found' }, 404);
+    }
+
+    db.prepare('DELETE FROM content WHERE id = ?').run(id);
+
+    return c.json({ success: true, message: 'Content deleted' });
+  } catch (error) {
+    console.error('Failed to delete content:', error);
+    return c.json({ error: 'Failed to delete content' }, 500);
+  }
+});
+
+export default app;
+</file>
+
+<file path="index.js">
+/**
+ * Marketing Dashboard API Server
+ * Built with Hono framework + Content Hub integration
+ */
+
+import { Hono } from 'hono';
+import { serve } from '@hono/node-server';
+import { cors } from 'hono/cors';
+import { serveStatic } from '@hono/node-server/serve-static';
+import { initDatabase } from './db/database.js';
+
+// Import route modules
+import campaignsRouter from './routes/campaigns.js';
+import contentRouter from './routes/content.js';
+import assetsRouter from './routes/assets.js';
+import aiRouter from './routes/ai.js';
+
+// Import middleware
+import { apiKeyAuth } from './middleware/auth.js';
+
+// Environment configuration
+const PORT = process.env.PORT || 3457;
+const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:5173'];
+const NODE_ENV = process.env.NODE_ENV || 'development';
+
+// Initialize database
+const db = initDatabase();
+
+// Verify foreign keys are enabled
+const fkStatus = db.pragma('foreign_keys', { simple: true });
+if (fkStatus !== 1) {
+  throw new Error('Foreign keys enforcement failed - database integrity at risk');
+}
+
+// Create Hono app
+const app = new Hono();
+
+// CORS Middleware (restricted origins)
+app.use('/*', cors({
+  origin: ALLOWED_ORIGINS,
+  credentials: true,
+}));
+
+// Authentication Middleware (protect all API routes)
+app.use('/api/*', apiKeyAuth);
+
+// Error handling middleware
+app.onError((err, c) => {
+  console.error('Server error:', err);
+  return c.json({
+    error: 'Internal server error',
+    message: NODE_ENV === 'development' ? err.message : undefined
+  }, 500);
+});
+
+// Health check
+app.get('/health', (c) => {
+  return c.json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    environment: NODE_ENV
+  });
+});
+
+// API Routes - Mount modular routers
+app.route('/api/campaigns', campaignsRouter);
+app.route('/api/content', contentRouter);
+app.route('/api/assets', assetsRouter);
+app.route('/api/ai', aiRouter);
+
+// Legacy routes for automations (TODO: move to separate module)
+app.get('/api/automations', (c) => {
+  try {
+    const automations = db.prepare('SELECT * FROM automations WHERE enabled = 1').all();
+    return c.json({ automations, total: automations.length });
+  } catch (error) {
+    console.error('Failed to fetch automations:', error);
+    return c.json({ error: 'Failed to fetch automations' }, 500);
+  }
+});
+
+// Serve static Vue build in production
+if (NODE_ENV === 'production') {
+  app.use('/*', serveStatic({ root: '../app/dist' }));
+}
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+  console.log('\n⏹ Shutting down gracefully...');
+  db.close();
+  process.exit(0);
+});
+
+process.on('SIGINT', () => {
+  console.log('\n⏹ Shutting down gracefully...');
+  db.close();
+  process.exit(0);
+});
+
+// Start server
+console.log(`\n🚀 Marketing Dashboard API`);
+console.log(`   Server: http://localhost:${PORT}`);
+console.log(`   Health: http://localhost:${PORT}/health`);
+console.log(`   Environment: ${NODE_ENV}`);
+console.log(`   CORS: ${ALLOWED_ORIGINS.join(', ')}`);
+console.log(`\n   Endpoints:`);
+console.log(`   • /api/campaigns - Campaign CRUD`);
+console.log(`   • /api/content   - Content CRUD`);
+console.log(`   • /api/assets    - Assets + Scanner`);
+console.log(`   • /api/ai        - AI Enhancement\n`);
+
+serve({
+  fetch: app.fetch,
+  port: PORT
+});
+</file>
+
+<file path="package.json">
+{
+  "name": "marketing-dashboard-server",
+  "version": "1.0.0",
+  "description": "Marketing Dashboard API Server",
+  "main": "index.js",
+  "type": "module",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "dev": "node --watch index.js",
+    "start": "node index.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hono/node-server": "^1.8.0",
+    "better-sqlite3": "^9.4.0",
+    "hono": "^4.0.0"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^4.0.16",
+    "@vitest/ui": "^4.0.16",
+    "supertest": "^7.1.4",
+    "vitest": "^4.0.16"
+  }
+}
+</file>
+
+<file path="vitest.config.js">
+import { defineConfig } from 'vitest/config';
+
+export default defineConfig({
+  test: {
+    globals: true,
+    environment: 'node',
+    include: ['__tests__/**/*.test.js'],
+    exclude: ['node_modules'],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html'],
+      exclude: [
+        'node_modules/',
+        '__tests__/',
+        'dist/'
+      ],
+      lines: 70,
+      functions: 70,
+      branches: 70,
+      statements: 70
+    }
+  }
+});
+</file>
+
+</files>

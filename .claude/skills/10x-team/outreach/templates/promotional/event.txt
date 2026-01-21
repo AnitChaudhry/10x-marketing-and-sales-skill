@@ -1,0 +1,17 @@
+---
+subject: You're invited: {{ event_name }}
+---
+Hi {{ first_name }},
+
+We'd love for you to join us!
+
+{{ custom_message }}
+
+This is a great opportunity to connect, learn, and grow together.
+
+RSVP by replying to this email or clicking the link below.
+
+Hope to see you there!
+
+Best regards,
+{{ my_name }}

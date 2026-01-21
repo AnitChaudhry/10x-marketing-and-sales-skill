@@ -1,0 +1,15 @@
+---
+subject: Following up on my previous email
+---
+Hi {{ first_name }},
+
+I wanted to follow up on my previous email from a few days ago.
+
+{{ custom_message }}
+
+I understand you're busy, but I'd really appreciate a few minutes of your time to discuss this further.
+
+Looking forward to hearing from you.
+
+Best regards,
+{{ my_name }}

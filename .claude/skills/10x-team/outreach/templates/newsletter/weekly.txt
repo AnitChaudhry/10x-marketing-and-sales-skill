@@ -1,0 +1,18 @@
+---
+subject: Your Weekly Update - {{ week_date }}
+---
+Hi {{ first_name }},
+
+Here's your weekly roundup of what's been happening:
+
+{{ custom_message }}
+
+---
+
+Thanks for being part of our community!
+
+Best regards,
+{{ my_name }}
+
+---
+To unsubscribe, reply with "UNSUBSCRIBE" in the subject line.

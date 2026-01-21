@@ -1,0 +1,13 @@
+---
+subject: Important Announcement
+---
+Hi {{ first_name }},
+
+We have some important news to share with you.
+
+{{ custom_message }}
+
+If you have any questions, please don't hesitate to reach out.
+
+Best regards,
+{{ my_name }}

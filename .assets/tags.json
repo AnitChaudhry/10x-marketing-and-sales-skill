@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "1.0.0",
+  "description": "Asset tagging system for ClaudeKit Marketing",
+  "tags": {
+    "status": {
+      "description": "Asset lifecycle status",
+      "values": ["draft", "review", "approved", "archived"]
+    },
+    "platform": {
+      "description": "Target platform",
+      "values": ["instagram", "twitter", "linkedin", "facebook", "youtube", "tiktok", "email", "web", "print"]
+    },
+    "campaign": {
+      "description": "Associated campaign",
+      "values": []
+    },
+    "content-type": {
+      "description": "Type of content",
+      "values": ["promotional", "educational", "brand", "product", "testimonial", "announcement"]
+    },
+    "format": {
+      "description": "Asset format/dimension",
+      "values": ["1x1", "4x5", "9x16", "16x9", "1.91x1", "story", "reel", "banner", "thumbnail"]
+    },
+    "source": {
+      "description": "Asset creation source",
+      "values": ["imagen-4", "veo-3", "user-upload", "canva", "figma", "photoshop"]
+    }
+  },
+  "taggedAssets": {}
+}

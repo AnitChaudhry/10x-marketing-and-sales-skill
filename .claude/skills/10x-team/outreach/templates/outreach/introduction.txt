@@ -1,0 +1,15 @@
+---
+subject: Introduction - {{ my_name }} from {{ my_company }}
+---
+Hi {{ first_name }},
+
+I hope this email finds you well. My name is {{ my_name }}, and I wanted to introduce myself.
+
+{{ custom_message }}
+
+I'd love to connect and learn more about your work at {{ company }}. Would you have a few minutes for a quick chat?
+
+Looking forward to hearing from you.
+
+Best regards,
+{{ my_name }}

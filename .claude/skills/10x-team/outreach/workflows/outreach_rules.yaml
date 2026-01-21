@@ -1,0 +1,293 @@
+# =============================================================================
+# 100X OUTREACH SYSTEM - INTELLIGENT OUTREACH RULES
+# =============================================================================
+# These rules ensure professional, non-spammy outreach behavior.
+# All workflows MUST respect these limits.
+# =============================================================================
+
+version: "1.0"
+
+# =============================================================================
+# GLOBAL TOUCH LIMITS (Per Target)
+# =============================================================================
+# Maximum interactions with a single person/brand across ALL platforms
+
+touch_limits:
+  # Individual Person
+  person:
+    max_touches_per_day: 2          # Max 2 interactions per day
+    max_touches_per_week: 5         # Max 5 interactions per week
+    max_total_touches: 8            # Max 8 total before stop
+    cool_off_after_no_response: 7   # Days to wait if no response
+    stop_after_ignores: 3           # Stop after 3 ignored messages
+
+  # Brand/Company Account
+  brand:
+    max_touches_per_day: 1          # Max 1 interaction per day
+    max_touches_per_week: 3         # Max 3 interactions per week
+    max_total_touches: 6            # Max 6 total before stop
+    cool_off_after_no_response: 14  # Wait 2 weeks if no response
+    stop_after_ignores: 2           # Stop after 2 ignored messages
+
+  # Influencer (10K+ followers)
+  influencer:
+    max_touches_per_day: 1          # Max 1 per day
+    max_touches_per_week: 2         # Max 2 per week
+    max_total_touches: 5            # Max 5 total
+    cool_off_after_no_response: 14  # Wait 2 weeks
+    stop_after_ignores: 2           # Stop after 2 ignores
+
+  # Executive/C-Suite
+  executive:
+    max_touches_per_day: 1          # Max 1 per day
+    max_touches_per_week: 2         # Max 2 per week
+    max_total_touches: 4            # Max 4 total
+    cool_off_after_no_response: 21  # Wait 3 weeks
+    stop_after_ignores: 2           # Stop after 2 ignores
+
+# =============================================================================
+# PLATFORM-SPECIFIC DELAYS
+# =============================================================================
+# Minimum time between actions on each platform
+
+platform_delays:
+  linkedin:
+    between_connections: "4-8 hours"      # Wait 4-8h between connection requests
+    between_messages: "24-48 hours"       # Wait 1-2 days between messages
+    after_connection_accepted: "24 hours" # Wait before first message
+    between_profile_views: "2-5 minutes"  # For warm-up views
+    between_likes: "1-3 minutes"          # For engagement likes
+    between_comments: "10-30 minutes"     # For engagement comments
+
+  twitter:
+    between_follows: "2-6 hours"          # Wait 2-6h between follows
+    between_dms: "24-48 hours"            # Wait 1-2 days between DMs
+    after_follow: "4-24 hours"            # Wait before first DM
+    between_likes: "1-3 minutes"          # For engagement
+    between_replies: "10-30 minutes"      # For engagement
+
+  instagram:
+    between_follows: "4-12 hours"         # Wait 4-12h between follows
+    between_dms: "48-72 hours"            # Wait 2-3 days between DMs
+    after_follow: "24-48 hours"           # Wait before DM
+    between_likes: "2-5 minutes"          # For engagement
+    between_comments: "15-45 minutes"     # For comments
+    between_story_replies: "24 hours"     # Story replies feel like DMs
+
+  email:
+    between_cold_emails: "24-48 hours"    # Wait 1-2 days
+    follow_up_1: "3-4 days"               # First follow-up
+    follow_up_2: "5-7 days"               # Second follow-up
+    follow_up_final: "7-14 days"          # Final follow-up
+    max_follow_ups: 3                     # Maximum follow-up emails
+
+# =============================================================================
+# ESCALATION PATTERNS
+# =============================================================================
+# How to escalate across platforms professionally
+
+escalation:
+  # Standard B2B Pattern
+  b2b_professional:
+    sequence:
+      1: { platform: "linkedin", action: "view_profile", day: 1 }
+      2: { platform: "linkedin", action: "like_post", day: 1, delay: "2-4 hours" }
+      3: { platform: "linkedin", action: "connect", day: 2 }
+      4: { platform: "linkedin", action: "message", day: 3, condition: "connection_accepted" }
+      5: { platform: "email", action: "send", day: 5, condition: "has_email" }
+      6: { platform: "linkedin", action: "follow_up", day: 8, condition: "no_response" }
+      7: { platform: "email", action: "follow_up", day: 12, condition: "no_response" }
+    total_duration: "14 days"
+    stop_conditions:
+      - "response_received"
+      - "connection_declined"
+      - "max_touches_reached"
+
+  # Brand Outreach Pattern (slower, more respectful)
+  brand_outreach:
+    sequence:
+      1: { platform: "instagram", action: "follow", day: 1 }
+      2: { platform: "instagram", action: "like_post", day: 1, delay: "4-8 hours" }
+      3: { platform: "instagram", action: "comment", day: 3, type: "value_add" }
+      4: { platform: "instagram", action: "story_reply", day: 5, condition: "has_story" }
+      5: { platform: "instagram", action: "dm", day: 7 }
+      6: { platform: "email", action: "send", day: 14, condition: "no_response" }
+    total_duration: "21 days"
+    stop_conditions:
+      - "response_received"
+      - "dm_request_pending"
+
+  # Influencer Pattern (very respectful, value-first)
+  influencer_outreach:
+    sequence:
+      1: { platform: "twitter", action: "follow", day: 1 }
+      2: { platform: "twitter", action: "like_tweet", day: 1, count: 3 }
+      3: { platform: "twitter", action: "reply", day: 3, type: "value_add" }
+      4: { platform: "instagram", action: "follow", day: 5, condition: "has_instagram" }
+      5: { platform: "twitter", action: "reply", day: 7, type: "insight" }
+      6: { platform: "twitter", action: "dm", day: 10 }
+      7: { platform: "email", action: "send", day: 14, condition: "no_response" }
+    total_duration: "21 days"
+    stop_conditions:
+      - "response_received"
+      - "max_touches_reached"
+
+# =============================================================================
+# WARM-UP REQUIREMENTS
+# =============================================================================
+# Actions required before direct outreach
+
+warmup_requirements:
+  linkedin:
+    before_connect:
+      - { action: "view_profile", required: true }
+      - { action: "like_post", required: false, if: "has_recent_posts" }
+    before_message:
+      - { action: "connection_accepted", required: true }
+      - { wait: "24 hours", required: true }
+
+  twitter:
+    before_dm:
+      - { action: "follow", required: true }
+      - { action: "like_tweet", required: false, count: 2 }
+      - { wait: "4 hours", required: true }
+
+  instagram:
+    before_dm:
+      - { action: "follow", required: true }
+      - { action: "like_post", required: false, count: 2 }
+      - { wait: "24 hours", required: true }
+
+  email:
+    before_cold_email:
+      - { action: "linkedin_connect", required: false, recommended: true }
+      - { action: "twitter_follow", required: false, recommended: true }
+
+# =============================================================================
+# MESSAGE QUALITY RULES
+# =============================================================================
+
+message_quality:
+  # Personalization requirements
+  personalization:
+    required_fields:
+      - "first_name"
+    recommended_fields:
+      - "company"
+      - "recent_achievement"
+      - "shared_interest"
+    personalization_score_minimum: 60  # Out of 100
+
+  # Spam indicators to avoid
+  avoid:
+    - "multiple_exclamation_marks"
+    - "all_caps_words"
+    - "generic_greeting"  # "Dear Sir/Madam"
+    - "immediate_pitch"   # Selling in first message
+    - "copy_paste_obvious"
+
+  # Message structure
+  structure:
+    first_message:
+      - "personalized_opening"
+      - "genuine_compliment_or_observation"
+      - "soft_value_mention"
+      - "low_pressure_cta"
+    follow_up:
+      - "reference_previous_message"
+      - "add_new_value"
+      - "clear_cta"
+
+# =============================================================================
+# TIMING RULES (Human-like behavior)
+# =============================================================================
+
+timing:
+  # Active hours (when to send)
+  active_hours:
+    weekdays:
+      start: "09:00"
+      end: "18:00"
+      peak_hours: ["10:00", "14:00", "16:00"]
+    weekends:
+      enabled: false  # No outreach on weekends
+
+  # Timezone handling
+  timezone:
+    respect_target_timezone: true
+    default: "America/New_York"
+
+  # Best days for different actions
+  best_days:
+    linkedin_connect: ["tuesday", "wednesday", "thursday"]
+    linkedin_message: ["tuesday", "wednesday", "thursday"]
+    twitter_dm: ["monday", "tuesday", "wednesday", "thursday"]
+    instagram_dm: ["monday", "tuesday", "wednesday"]
+    cold_email: ["tuesday", "wednesday", "thursday"]
+
+  # Avoid
+  avoid:
+    - "monday_morning"  # Before 11am Monday
+    - "friday_afternoon"  # After 2pm Friday
+    - "holidays"
+    - "major_events"  # Product Hunt launches, etc.
+
+# =============================================================================
+# RESPONSE HANDLING
+# =============================================================================
+
+response_handling:
+  # When response received
+  on_response:
+    pause_all_automation: true
+    notify_user: true
+    wait_for_manual_review: true
+
+  # Positive signals
+  positive_signals:
+    - "connection_accepted"
+    - "reply_received"
+    - "meeting_scheduled"
+    - "interest_expressed"
+
+  # Negative signals
+  negative_signals:
+    - "connection_declined"
+    - "message_ignored_3x"
+    - "unfollow"
+    - "block"
+
+  # Actions on negative signals
+  on_negative:
+    action: "stop_and_mark_cold"
+    cool_off_period: "90 days"
+
+# =============================================================================
+# DAILY VELOCITY LIMITS
+# =============================================================================
+# Maximum actions per day to avoid detection
+
+daily_velocity:
+  linkedin:
+    max_connection_requests: 20
+    max_messages: 30
+    max_profile_views: 80
+    max_post_likes: 50
+    max_comments: 15
+
+  twitter:
+    max_follows: 40
+    max_dms: 30
+    max_likes: 100
+    max_replies: 50
+
+  instagram:
+    max_follows: 25
+    max_dms: 20
+    max_likes: 50
+    max_comments: 15
+    max_story_replies: 15
+
+  email:
+    max_cold_emails: 50
+    max_follow_ups: 30

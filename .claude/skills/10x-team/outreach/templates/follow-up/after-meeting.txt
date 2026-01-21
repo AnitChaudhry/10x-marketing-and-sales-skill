@@ -1,0 +1,15 @@
+---
+subject: Great connecting with you!
+---
+Hi {{ first_name }},
+
+It was wonderful speaking with you today. I really enjoyed our conversation about {{ topic }}.
+
+{{ custom_message }}
+
+As discussed, I'll follow up on the next steps. Please don't hesitate to reach out if you have any questions in the meantime.
+
+Looking forward to staying in touch!
+
+Best regards,
+{{ my_name }}

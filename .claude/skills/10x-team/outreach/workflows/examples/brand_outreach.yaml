@@ -1,0 +1,217 @@
+# =============================================================================
+# BRAND/COMPANY OUTREACH WORKFLOW
+# =============================================================================
+# Target: Brands, companies, business accounts
+# Duration: 21 days (slower, more respectful)
+# Platforms: Instagram (primary) + Email (secondary)
+# Touch limit: 6 max per brand
+# =============================================================================
+
+name: "Brand Partnership Outreach"
+description: "Respectful outreach sequence for brand partnerships"
+version: "1.0"
+
+# Target criteria
+target_type: "brand"
+target_criteria:
+  account_type: "business"
+  follower_range: "10K-500K"
+  categories: []  # Specify or leave empty
+
+# Workflow rules - SLOWER for brands
+rules:
+  max_touches_per_brand: 6
+  max_touches_per_day: 1      # Only 1 touch per day for brands
+  min_days_between_touches: 2  # At least 2 days between interactions
+  respect_timezone: true
+  active_hours_only: true
+  weekdays_only: true
+  stop_on_response: true
+  cool_off_days: 14  # 2 weeks before follow-up
+
+# =============================================================================
+# PHASE 1: DISCOVERY & FOLLOW (Day 1)
+# Start with a simple follow
+# =============================================================================
+phases:
+  - name: "initial_follow"
+    day: 1
+    description: "Follow the brand and engage lightly"
+    steps:
+      - action: "follow"
+        platform: "instagram"
+        delay_before: "0"
+        purpose: "Show initial interest"
+        notes: "Simple follow, no other action yet"
+
+      - action: "like_post"
+        platform: "instagram"
+        delay_before: "4-8 hours"
+        target: "recent_posts"
+        count: 2
+        purpose: "Light engagement"
+        notes: "Like 2 recent posts to show genuine interest"
+
+# =============================================================================
+# PHASE 2: MEANINGFUL ENGAGEMENT (Day 3-4)
+# Show you understand their brand
+# =============================================================================
+  - name: "meaningful_engagement"
+    day: 3
+    description: "Leave a thoughtful, value-add comment"
+    steps:
+      - action: "comment"
+        platform: "instagram"
+        delay_before: "0"
+        target: "best_recent_post"  # Their most engaging recent post
+        template: "instagram/comments/value_add"
+        template_vars:
+          type: "insight"
+          genuine: true
+          no_pitch: true
+        purpose: "Demonstrate understanding of their brand"
+        notes: |
+          Comment should be thoughtful and specific to their content.
+          NO mention of your product/service yet.
+          Examples:
+          - "The lighting in this campaign is incredible - love how it captures the brand essence"
+          - "This resonates so well with your audience. The engagement speaks for itself!"
+
+# =============================================================================
+# PHASE 3: STORY ENGAGEMENT (Day 5-6)
+# Engage with their stories if available
+# =============================================================================
+  - name: "story_engagement"
+    day: 5
+    description: "Reply to their Instagram story"
+    conditions:
+      - "has_active_story"
+    skip_if_not_met: true
+    steps:
+      - action: "story_reply"
+        platform: "instagram"
+        template: "instagram/stories/story_reaction"
+        template_vars:
+          type: "genuine_reaction"
+          brief: true
+        purpose: "Natural, casual interaction"
+        notes: |
+          Story replies feel more personal and less formal.
+          Keep it brief and genuine.
+          Example: "Love seeing behind the scenes! 🙌"
+
+# =============================================================================
+# PHASE 4: FIRST DM (Day 7-8)
+# Now you've built some familiarity
+# =============================================================================
+  - name: "first_dm"
+    day: 7
+    description: "Send first partnership inquiry DM"
+    steps:
+      - action: "dm"
+        platform: "instagram"
+        template: "instagram/dms/brand_collaboration"
+        template_vars:
+          reference_engagement: true  # Mention you've been following
+          value_first: true
+          specific_idea: true
+          low_pressure: true
+        purpose: "Introduce partnership opportunity"
+        notes: |
+          Key elements:
+          - Reference that you've been following/engaging
+          - Specific collaboration idea (not generic)
+          - Focus on value for THEM
+          - Easy, low-pressure CTA
+
+# =============================================================================
+# PHASE 5: EMAIL OUTREACH (Day 14)
+# Alternative channel if no DM response
+# =============================================================================
+  - name: "email_outreach"
+    day: 14
+    description: "Send formal partnership email"
+    conditions:
+      - "no_dm_response"
+      - "has_email"  # Found business email
+    steps:
+      - action: "send"
+        platform: "email"
+        template: "email/outreach/partnership"
+        template_vars:
+          reference_instagram: true
+          include_media_kit: false  # Don't attach on first email
+          clear_value_prop: true
+        purpose: "Formal partnership inquiry"
+        notes: |
+          More formal channel for business discussion.
+          Reference your Instagram engagement.
+          Professional but not corporate-stiff.
+
+# =============================================================================
+# PHASE 6: FINAL FOLLOW-UP (Day 21)
+# Gentle final touch
+# =============================================================================
+  - name: "final_followup"
+    day: 21
+    description: "Final gentle follow-up"
+    conditions:
+      - "no_response"
+    steps:
+      - action: "dm"
+        platform: "instagram"
+        template: "instagram/dms/thank_you"
+        template_vars:
+          type: "closing"
+          leave_door_open: true
+        purpose: "Professional close"
+        notes: |
+          Brief, respectful close.
+          Example: "Hey! Just wanted to say I'll keep supporting the brand
+          regardless - really love what you're doing. If partnerships ever
+          make sense down the road, I'm always happy to chat! 🙌"
+
+# =============================================================================
+# COMPLETION
+# =============================================================================
+completion:
+  on_response:
+    action: "pause_and_notify"
+    message: "Brand responded! Review and continue conversation."
+
+  on_no_response:
+    action: "mark_cool"
+    cool_off_period: "90 days"
+    continue_passive_engagement: true  # Can still like posts occasionally
+    message: "No response. Will try again in 3 months."
+
+# =============================================================================
+# SCHEDULE
+# =============================================================================
+schedule:
+  days: ["tuesday", "wednesday", "thursday"]
+  hours:
+    start: "10:00"
+    end: "16:00"
+  timezone: "target"
+
+# =============================================================================
+# EXPECTED TIMELINE
+# =============================================================================
+#
+# Day 1:   Follow + Like 2 posts
+# Day 3:   Thoughtful comment on best post
+# Day 5-6: Story reply (if available)
+# Day 7:   First DM - partnership inquiry
+# Day 14:  Email (if no DM response)
+# Day 21:  Final follow-up DM
+#
+# Total touches: 5-6 max
+# Total duration: 21 days
+#
+# KEY DIFFERENCES FROM B2B:
+# - Slower pacing (2+ days between touches)
+# - More warm-up before DM
+# - Only 1 touch per day maximum
+# - Longer cool-off periods
+# =============================================================================

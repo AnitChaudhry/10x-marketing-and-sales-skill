@@ -1,0 +1,9 @@
+---
+subject: {{ subject }}
+---
+Hi {{ first_name }},
+
+{{ custom_message }}
+
+Best regards,
+{{ my_name }}

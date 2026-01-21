@@ -1,0 +1,261 @@
+# =============================================================================
+# INVESTOR OUTREACH WORKFLOW
+# =============================================================================
+# Target: VCs, Angels, Investment Partners
+# Duration: 28 days (very respectful, relationship-focused)
+# Platforms: LinkedIn + Twitter + Email
+# Touch limit: 4 max per investor
+# =============================================================================
+
+name: "Investor Relationship Building"
+description: "Professional, relationship-first investor outreach"
+version: "1.0"
+
+# Target criteria
+target_type: "executive"  # Treat investors like executives
+target_criteria:
+  roles: ["Partner", "Principal", "Managing Director", "GP", "Angel"]
+  investment_stage: ["pre-seed", "seed", "series-a"]
+  investment_focus: []  # Specify sector
+
+# Workflow rules - VERY RESPECTFUL
+rules:
+  max_touches_per_investor: 4   # Very limited touches
+  max_touches_per_day: 1
+  min_days_between_touches: 5   # At least 5 days between contacts
+  warm_intro_preferred: true    # Flag for manual warm intro
+  respect_timezone: true
+  active_hours_only: true
+  weekdays_only: true
+  stop_on_response: true
+  cool_off_days: 21  # 3 weeks before any follow-up
+
+# =============================================================================
+# PHASE 0: PRE-OUTREACH CHECK
+# Always look for warm intro first
+# =============================================================================
+phases:
+  - name: "warm_intro_check"
+    day: 0
+    description: "Check for potential warm introductions"
+    type: "manual_check"
+    steps:
+      - action: "check_mutual_connections"
+        platform: "linkedin"
+        purpose: "Find warm intro path"
+        notes: |
+          ALWAYS prefer warm intros for investors.
+          Check:
+          - Mutual LinkedIn connections
+          - Portfolio founder connections
+          - Event co-attendees
+
+          If warm intro available: PAUSE and pursue that path.
+
+# =============================================================================
+# PHASE 1: TWITTER ENGAGEMENT (Day 1-3)
+# Most investors are active on Twitter
+# =============================================================================
+  - name: "twitter_engagement"
+    day: 1
+    description: "Engage with investor's Twitter content"
+    steps:
+      - action: "follow"
+        platform: "twitter"
+        delay_before: "0"
+        purpose: "Follow their investment thesis content"
+
+      - action: "like_tweet"
+        platform: "twitter"
+        delay_before: "2-4 hours"
+        target: "investment_thesis_tweets"  # Their takes on investing
+        count: 2
+        purpose: "Show genuine interest in their thinking"
+
+  - name: "twitter_reply"
+    day: 3
+    description: "Add thoughtful insight to their tweet"
+    steps:
+      - action: "reply"
+        platform: "twitter"
+        target: "thesis_or_market_tweet"
+        template: "twitter/replies/insight"
+        template_vars:
+          type: "market_insight"
+          data_backed: true
+          no_pitch: true
+        purpose: "Demonstrate market knowledge"
+        notes: |
+          Investors respect founders who understand markets.
+          Share a genuine insight, not a pitch.
+          Example: "Interesting take. We're seeing similar patterns
+          in [adjacent space] - [specific data point]"
+
+# =============================================================================
+# PHASE 2: LINKEDIN CONNECTION (Day 7)
+# Professional connection request
+# =============================================================================
+  - name: "linkedin_connect"
+    day: 7
+    description: "Send professional LinkedIn connection"
+    steps:
+      - action: "view_profile"
+        platform: "linkedin"
+        delay_before: "0"
+        purpose: "Profile view notification"
+
+      - action: "connect"
+        platform: "linkedin"
+        delay_before: "4-8 hours"
+        template: "linkedin/connection-requests/investor_outreach"
+        template_vars:
+          reference_twitter: true
+          mention_thesis_fit: true
+          no_pitch_yet: true
+        purpose: "Establish LinkedIn connection"
+        notes: |
+          DO NOT pitch in connection request.
+          Example: "Hi [name], I've been following your thoughts on
+          [sector] - particularly your thread on [topic]. Building in
+          this space and would value being connected."
+
+# =============================================================================
+# PHASE 3: FIRST EMAIL (Day 14)
+# Only after some engagement, send concise email
+# =============================================================================
+  - name: "first_email"
+    day: 14
+    description: "Send concise, compelling email"
+    conditions:
+      - "has_email"
+    steps:
+      - action: "send"
+        platform: "email"
+        template: "email/outreach/investor_pitch"
+        template_vars:
+          format: "forwardable"  # Easy to forward internally
+          traction_focused: true
+          specific_ask: true
+          brief: true  # Under 150 words
+        purpose: "Clear, compelling introduction"
+        notes: |
+          Investor emails should be:
+          - Under 150 words
+          - Lead with traction/metrics
+          - Clear thesis fit
+          - Specific ask (meeting, not "pick your brain")
+          - Easy to forward
+
+          Structure:
+          1. One-liner on what you do
+          2. Key traction metric
+          3. Why them specifically (thesis fit)
+          4. Clear ask
+
+# =============================================================================
+# PHASE 4: FOLLOW-UP (Day 21)
+# Single, professional follow-up
+# =============================================================================
+  - name: "follow_up"
+    day: 21
+    description: "Brief follow-up with new info"
+    conditions:
+      - "no_response"
+    steps:
+      - action: "send"
+        platform: "email"
+        template: "email/follow-up/check_in"
+        template_vars:
+          add_new_traction: true
+          brief: true
+          respectful_tone: true
+        purpose: "Update with new progress"
+        notes: |
+          Don't just "bump" - add new information.
+          Example: "Following up with a quick update - we just hit
+          [new milestone]. Would still love to chat if you have
+          15 minutes this week."
+
+# =============================================================================
+# PHASE 5: LINKEDIN MESSAGE (Day 28)
+# Final touch via LinkedIn
+# =============================================================================
+  - name: "final_touch"
+    day: 28
+    description: "Final LinkedIn message if connected"
+    conditions:
+      - "linkedin_connected"
+      - "no_response"
+    steps:
+      - action: "message"
+        platform: "linkedin"
+        template: "linkedin/messages/meeting_request"
+        template_vars:
+          reference_email: true
+          specific_time_ask: true
+          make_easy: true
+        purpose: "Final meeting request"
+        notes: |
+          Make it easy to say yes.
+          Example: "Hi [name], sent an email a couple weeks ago
+          about [company]. Would love 15 mins to share what we're
+          building. Happy to do next Tue/Wed, whatever works."
+
+# =============================================================================
+# COMPLETION
+# =============================================================================
+completion:
+  on_response:
+    action: "high_priority_notify"
+    message: "Investor responded! Prioritize immediate follow-up."
+
+  on_no_response:
+    action: "mark_for_future"
+    update_with_news: true  # Send when you have big news
+    retry_after: "90 days"
+    message: "No response. Will re-engage when there's significant news."
+
+  on_meeting_scheduled:
+    action: "prepare_materials"
+    message: "Meeting scheduled! Prepare deck and data room."
+
+# =============================================================================
+# SCHEDULE
+# =============================================================================
+schedule:
+  days: ["tuesday", "wednesday", "thursday"]
+  hours:
+    start: "09:00"
+    end: "11:00"  # Early morning for emails
+  timezone: "target"
+  avoid:
+    - "monday_mornings"
+    - "friday_afternoons"
+    - "quarter_end"  # Investors are busy
+    - "major_vc_events"  # Demo days, etc.
+
+# =============================================================================
+# EXPECTED TIMELINE
+# =============================================================================
+#
+# Day 0:   Check for warm intros (ALWAYS FIRST)
+# Day 1:   Twitter follow + likes
+# Day 3:   Thoughtful Twitter reply
+# Day 7:   LinkedIn view + connect
+# Day 14:  First email (concise pitch)
+# Day 21:  Email follow-up with new traction
+# Day 28:  LinkedIn message (if connected)
+#
+# Total touches: 4 max
+# Total duration: 28 days
+#
+# INVESTOR OUTREACH PRINCIPLES:
+# 1. WARM INTRO > COLD (always check first)
+# 2. Be where they are (Twitter often more than LinkedIn)
+# 3. Demonstrate market insight, not desperation
+# 4. Brief emails (<150 words)
+# 5. Lead with traction
+# 6. Specific ask (not "pick your brain")
+# 7. Add value in follow-ups (new traction)
+# 8. Know when to stop
+# =============================================================================

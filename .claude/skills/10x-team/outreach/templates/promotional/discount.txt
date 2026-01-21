@@ -1,0 +1,15 @@
+---
+subject: Special offer just for you, {{ first_name }}
+---
+Hi {{ first_name }},
+
+We have an exclusive offer that we think you'll love!
+
+{{ custom_message }}
+
+This offer is available for a limited time, so don't miss out.
+
+Let me know if you have any questions!
+
+Best regards,
+{{ my_name }}

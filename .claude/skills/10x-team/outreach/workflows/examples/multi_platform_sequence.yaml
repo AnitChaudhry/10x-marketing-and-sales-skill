@@ -1,0 +1,374 @@
+# =============================================================================
+# MULTI-PLATFORM OUTREACH SEQUENCE
+# =============================================================================
+# Target: Potential customers/partners across all channels
+# Duration: 30 days
+# Platforms: LinkedIn + Twitter + Instagram + Email
+# Touch limit: 10 max per target (across ALL platforms)
+# =============================================================================
+
+name: "Full-Funnel Multi-Platform Sequence"
+description: "Comprehensive cross-platform outreach with intelligent routing"
+version: "1.0"
+
+# Target criteria
+target_type: "person"
+target_criteria:
+  has_multiple_platforms: true
+  priority_platform: "strongest_presence"  # Start where they're most active
+
+# Workflow rules
+rules:
+  max_total_touches: 10          # Across ALL platforms combined
+  max_touches_per_platform: 4    # Max per individual platform
+  max_touches_per_day: 2         # Total touches per day
+  min_hours_between_touches: 4   # Even same day, spread out
+  cross_platform_gap: 24         # Hours between switching platforms
+  respect_timezone: true
+  active_hours_only: true
+  weekdays_only: true
+  stop_on_response: true
+  cool_off_days: 14
+
+# Platform priority (which to use when multiple available)
+platform_priority:
+  for_professionals: ["linkedin", "twitter", "email", "instagram"]
+  for_creators: ["twitter", "instagram", "linkedin", "email"]
+  for_brands: ["instagram", "email", "twitter", "linkedin"]
+  for_developers: ["twitter", "linkedin", "email"]
+
+# =============================================================================
+# PHASE 1: DISCOVERY & PLATFORM MAPPING (Day 1)
+# Figure out where they're most active
+# =============================================================================
+phases:
+  - name: "platform_discovery"
+    day: 1
+    description: "Identify best platform to start"
+    type: "analysis"
+    steps:
+      - action: "analyze_presence"
+        purpose: "Determine primary platform"
+        criteria:
+          - "recent_activity"       # Where are they posting?
+          - "engagement_level"      # Where do they engage most?
+          - "follower_count"        # Where's their audience?
+          - "content_type"          # What kind of content?
+        notes: |
+          Route to appropriate workflow:
+          - LinkedIn primary → b2b_professional flow
+          - Twitter primary → twitter-first flow
+          - Instagram primary → instagram-first flow
+
+# =============================================================================
+# PHASE 2: PRIMARY PLATFORM WARM-UP (Days 1-3)
+# Start on their most active platform
+# =============================================================================
+  - name: "primary_warmup"
+    day: 1
+    description: "Warm-up on primary platform"
+    route_based_on: "primary_platform"
+
+    # If LinkedIn is primary
+    linkedin_steps:
+      - action: "view_profile"
+        delay_before: "0"
+      - action: "like_post"
+        delay_before: "2-4 hours"
+        condition: "has_recent_posts"
+
+    # If Twitter is primary
+    twitter_steps:
+      - action: "follow"
+        delay_before: "0"
+      - action: "like_tweet"
+        delay_before: "1-2 hours"
+        count: 2
+
+    # If Instagram is primary
+    instagram_steps:
+      - action: "follow"
+        delay_before: "0"
+      - action: "like_post"
+        delay_before: "2-4 hours"
+        count: 2
+
+# =============================================================================
+# PHASE 3: PRIMARY PLATFORM ENGAGEMENT (Days 3-5)
+# Deeper engagement on primary
+# =============================================================================
+  - name: "primary_engagement"
+    day: 3
+    description: "Meaningful engagement on primary platform"
+
+    linkedin_steps:
+      - action: "comment"
+        template: "linkedin/comments/thoughtful_engagement"
+        delay_before: "0"
+
+    twitter_steps:
+      - action: "reply"
+        template: "twitter/replies/value_add"
+        target: "relevant_tweet"
+        delay_before: "0"
+
+    instagram_steps:
+      - action: "comment"
+        template: "instagram/comments/value_add"
+        delay_before: "0"
+
+# =============================================================================
+# PHASE 4: SECONDARY PLATFORM FOLLOW (Day 5)
+# Establish presence on second platform
+# =============================================================================
+  - name: "secondary_platform"
+    day: 5
+    description: "Follow on secondary platform"
+    condition: "has_secondary_platform"
+
+    steps:
+      - action: "follow"
+        platform: "secondary"
+        delay_before: "0"
+      - action: "like"
+        platform: "secondary"
+        delay_before: "4-8 hours"
+        count: 2
+
+# =============================================================================
+# PHASE 5: PRIMARY PLATFORM CONNECTION (Day 7)
+# Connect/DM on primary platform
+# =============================================================================
+  - name: "primary_connection"
+    day: 7
+    description: "Send connection request or first message"
+
+    linkedin_steps:
+      - action: "connect"
+        template: "linkedin/connection-requests/cold_outreach"
+        purpose: "Establish connection"
+
+    twitter_steps:
+      - action: "dm"
+        template: "twitter/dms/cold_dm"
+        condition: "dm_open_or_mutual"
+        purpose: "First direct contact"
+
+    instagram_steps:
+      - action: "dm"
+        template: "instagram/dms/cold_dm"
+        purpose: "First direct contact"
+
+# =============================================================================
+# PHASE 6: EMAIL INTRODUCTION (Day 10)
+# Add email to the mix
+# =============================================================================
+  - name: "email_intro"
+    day: 10
+    description: "Email introduction if have email"
+    conditions:
+      - "has_email"
+      - "no_response_yet"
+
+    steps:
+      - action: "send"
+        platform: "email"
+        template: "email/outreach/warm_intro"
+        template_vars:
+          reference_social: true
+          platform: "{{primary_platform}}"
+        purpose: "Multi-channel touchpoint"
+
+# =============================================================================
+# PHASE 7: SECONDARY PLATFORM ENGAGEMENT (Day 12)
+# Engage on secondary platform
+# =============================================================================
+  - name: "secondary_engagement"
+    day: 12
+    description: "Engage on secondary platform"
+    condition: "has_secondary_platform"
+
+    steps:
+      - action: "engage"
+        platform: "secondary"
+        type: "like_or_comment"
+        purpose: "Cross-platform visibility"
+
+# =============================================================================
+# PHASE 8: PRIMARY FOLLOW-UP (Day 14)
+# Follow up on primary platform
+# =============================================================================
+  - name: "primary_followup"
+    day: 14
+    description: "Follow up on primary platform"
+    conditions:
+      - "no_response"
+
+    linkedin_steps:
+      - action: "message"
+        condition: "connection_accepted"
+        template: "linkedin/messages/follow_up_no_response"
+
+    twitter_steps:
+      - action: "dm"
+        template: "twitter/dms/after_follow"
+        add_value: true
+
+    instagram_steps:
+      - action: "dm"
+        template: "instagram/dms/after_follow"
+        add_value: true
+
+# =============================================================================
+# PHASE 9: EMAIL FOLLOW-UP (Day 18)
+# Email follow-up with new value
+# =============================================================================
+  - name: "email_followup"
+    day: 18
+    description: "Email follow-up"
+    conditions:
+      - "has_email"
+      - "no_response"
+
+    steps:
+      - action: "send"
+        platform: "email"
+        template: "email/follow-up/no_response_1"
+        template_vars:
+          add_new_value: true
+
+# =============================================================================
+# PHASE 10: CROSS-PLATFORM MESSAGE (Day 22)
+# Try different platform for message
+# =============================================================================
+  - name: "cross_platform_message"
+    day: 22
+    description: "Message on secondary platform"
+    conditions:
+      - "no_response"
+      - "has_secondary_platform"
+      - "not_messaged_on_secondary"
+
+    steps:
+      - action: "dm"
+        platform: "secondary"
+        template: "{{secondary_platform}}/dms/cold_dm"
+        template_vars:
+          reference_other_platform: true
+        purpose: "Try different channel"
+
+# =============================================================================
+# PHASE 11: FINAL FOLLOW-UP (Day 28)
+# Final professional follow-up
+# =============================================================================
+  - name: "final_followup"
+    day: 28
+    description: "Final follow-up"
+    conditions:
+      - "no_response"
+
+    steps:
+      - action: "send"
+        platform: "email"
+        template: "email/follow-up/no_response_final"
+        template_vars:
+          graceful_close: true
+          leave_door_open: true
+
+# =============================================================================
+# PHASE 12: GRACEFUL CLOSE (Day 30)
+# End sequence gracefully
+# =============================================================================
+  - name: "graceful_close"
+    day: 30
+    description: "End on positive note"
+    conditions:
+      - "no_response"
+
+    steps:
+      - action: "engage"
+        platform: "primary"
+        type: "like"
+        count: 1
+        purpose: "Show continued interest without being pushy"
+
+# =============================================================================
+# TOUCH TRACKING
+# =============================================================================
+touch_tracking:
+  count_as_touch:
+    - "connect"
+    - "message"
+    - "dm"
+    - "email"
+    - "comment"
+
+  count_as_passive:
+    - "follow"
+    - "like"
+    - "view"
+
+  max_active_touches: 6
+  max_passive_touches: 10
+
+# =============================================================================
+# COMPLETION
+# =============================================================================
+completion:
+  on_response:
+    action: "pause_and_notify"
+    platform_responded: true
+    message: "Response received on {{platform}}! Continue conversation there."
+
+  on_no_response:
+    action: "mark_cold"
+    cool_off_period: "90 days"
+    passive_engagement: true
+    message: "Full sequence complete. No response. Will re-engage in 90 days."
+
+  on_any_connection:
+    action: "update_status"
+    status: "connected"
+    continue_nurture: true
+
+# =============================================================================
+# SCHEDULE
+# =============================================================================
+schedule:
+  days: ["tuesday", "wednesday", "thursday"]
+  hours:
+    linkedin: { start: "09:00", end: "11:00" }
+    twitter: { start: "12:00", end: "14:00" }
+    instagram: { start: "18:00", end: "20:00" }
+    email: { start: "09:00", end: "10:00" }
+  timezone: "target"
+
+# =============================================================================
+# EXPECTED TIMELINE
+# =============================================================================
+#
+# Day 1:   Primary platform warm-up (view/follow + likes)
+# Day 3:   Primary platform engagement (comment/reply)
+# Day 5:   Secondary platform follow + likes
+# Day 7:   Primary platform connection/DM
+# Day 10:  Email introduction
+# Day 12:  Secondary platform engagement
+# Day 14:  Primary platform follow-up message
+# Day 18:  Email follow-up
+# Day 22:  Secondary platform DM
+# Day 28:  Final email follow-up
+# Day 30:  Graceful close (passive engagement)
+#
+# Total active touches: 6
+# Total passive touches: 8-10
+# Platforms used: 2-4
+# Duration: 30 days
+#
+# MULTI-PLATFORM PRINCIPLES:
+# 1. Start where they're most active
+# 2. Cross-platform gap of 24+ hours
+# 3. Never overwhelm on one platform
+# 4. Track touches across ALL platforms
+# 5. Different times for different platforms
+# 6. Graceful close, leave door open
+# =============================================================================

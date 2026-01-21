@@ -1,0 +1,15 @@
+---
+subject: Introducing something new that you'll love
+---
+Hi {{ first_name }},
+
+We're excited to share some big news with you!
+
+{{ custom_message }}
+
+As a valued contact, we wanted you to be among the first to know.
+
+Check it out and let us know what you think. We'd love your feedback!
+
+Best regards,
+{{ my_name }}

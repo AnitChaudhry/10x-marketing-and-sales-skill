@@ -1,0 +1,83 @@
+# AI Founders Outreach Workflow
+# This workflow finds and connects with AI startup founders
+
+name: "AI Founders Outreach"
+description: "Multi-platform outreach to AI startup founders in San Francisco"
+version: "1.0"
+
+# Discovery phase - uses Exa AI
+discovery:
+  source: "exa"
+  query: "AI startup founders Series A San Francisco"
+  max_results: 10
+  filters:
+    - has_linkedin: true
+
+# Execution phases - run in sequence
+phases:
+  # Phase 1: Warm up - view their profile
+  - name: "warm_up"
+    platform: "linkedin"
+    action: "view_profile"
+    delay_after: "2-5 minutes"
+    description: "View target's LinkedIn profile to appear in their notifications"
+
+  # Phase 2: Engage - like a recent post
+  - name: "engage_like"
+    platform: "linkedin"
+    action: "like_post"
+    delay_after: "1-3 hours"
+    condition: "has_recent_posts"
+    description: "Like one of their recent posts to show genuine interest"
+
+  # Phase 3: Connect - send connection request
+  - name: "connect"
+    platform: "linkedin"
+    action: "connect"
+    template: "linkedin/connection-requests/cold_outreach"
+    delay_after: "24-48 hours"
+    description: "Send personalized connection request"
+
+  # Phase 4: Cross-platform - follow on Twitter
+  - name: "follow_twitter"
+    platform: "twitter"
+    action: "follow"
+    condition: "has_twitter"
+    delay_after: "2-4 hours"
+    description: "Follow on Twitter to establish multi-platform presence"
+
+  # Phase 5: Message - send intro after connection accepted
+  - name: "intro_message"
+    platform: "linkedin"
+    action: "message"
+    template: "linkedin/messages/intro_after_connect"
+    condition: "connection_accepted"
+    delay_after: "24-72 hours"
+    description: "Send personalized intro message after they accept"
+
+# Rate limits (conservative to avoid detection)
+rate_limits:
+  linkedin:
+    connections_per_day: 20
+    messages_per_day: 50
+    profile_views_per_day: 100
+    min_delay_seconds: 120
+    max_delay_seconds: 600
+  twitter:
+    follows_per_day: 50
+    min_delay_seconds: 60
+    max_delay_seconds: 180
+
+# Schedule - when to run
+schedule:
+  days: ["monday", "tuesday", "wednesday", "thursday", "friday"]
+  hours:
+    start: "09:00"
+    end: "17:00"
+  timezone: "America/Los_Angeles"
+
+# Notifications
+notifications:
+  on_complete: true
+  on_error: true
+  daily_summary: true

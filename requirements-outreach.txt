@@ -1,0 +1,63 @@
+# =============================================================================
+# 10x-Outreach-Skill Dependencies
+# =============================================================================
+
+# Google APIs
+google-api-python-client>=2.100.0
+google-auth-httplib2>=0.1.0
+google-auth-oauthlib>=1.1.0
+google-auth>=2.23.0
+
+# Google Sheets Integration
+gspread>=5.12.0
+oauth2client>=4.1.3
+
+# Email Handling
+email-validator>=2.1.0
+html2text>=2020.1.16
+
+# Environment & Configuration
+python-dotenv>=1.0.0
+
+# Template Engine
+Jinja2>=3.1.2
+
+# Data Processing
+pandas>=2.0.0
+
+# CLI & Output
+rich>=13.0.0
+click>=8.1.0
+
+# HTTP Client
+requests>=2.31.0
+httplib2>=0.22.0
+
+# Async Support (optional)
+aiohttp>=3.9.0
+
+# Scheduling (optional)
+schedule>=1.2.0
+
+# JSON Handling
+orjson>=3.9.0
+
+# Date/Time
+python-dateutil>=2.8.0
+
+# =============================================================================
+# 100X System - Workflow & YAML Support
+# =============================================================================
+PyYAML>=6.0.0
+
+# =============================================================================
+# 100X System - Browser Automation (optional, for local testing)
+# =============================================================================
+playwright>=1.40.0
+
+# =============================================================================
+# Optional: For HTML Email Templates
+# =============================================================================
+# premailer>=3.10.0
+# beautifulsoup4>=4.12.0
+# html2text>=2020.1.16

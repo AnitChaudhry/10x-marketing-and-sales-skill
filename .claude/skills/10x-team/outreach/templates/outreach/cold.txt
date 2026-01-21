@@ -1,0 +1,13 @@
+---
+subject: Quick question about {{ company }}
+---
+Hi {{ first_name }},
+
+I came across {{ company }} and was impressed by the work you're doing.
+
+{{ custom_message }}
+
+Would you be open to a brief 15-minute call this week to discuss how we might work together?
+
+Best regards,
+{{ my_name }}

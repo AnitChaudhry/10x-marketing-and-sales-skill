@@ -1,0 +1,245 @@
+# =============================================================================
+# INFLUENCER OUTREACH WORKFLOW
+# =============================================================================
+# Target: Content creators, thought leaders, influencers
+# Duration: 21 days (value-first approach)
+# Platforms: Twitter (primary) + Instagram + Email
+# Touch limit: 5 max per influencer
+# =============================================================================
+
+name: "Influencer Collaboration Outreach"
+description: "Value-first outreach to influencers and content creators"
+version: "1.0"
+
+# Target criteria
+target_type: "influencer"
+target_criteria:
+  follower_range: "10K-1M"
+  engagement_rate_min: "2%"
+  content_categories: []  # Specify niche
+
+# Workflow rules - VALUE FIRST approach
+rules:
+  max_touches_per_influencer: 5
+  max_touches_per_day: 1
+  min_days_between_dm: 7       # Wait at least 7 days between DMs
+  engagement_before_dm: 3      # Engage 3+ times before DM
+  respect_timezone: true
+  active_hours_only: true
+  weekdays_only: true
+  stop_on_response: true
+  cool_off_days: 14
+
+# =============================================================================
+# PHASE 1: TWITTER FOLLOW & ENGAGE (Day 1)
+# Start where most influencers are active
+# =============================================================================
+phases:
+  - name: "twitter_discovery"
+    day: 1
+    description: "Follow and engage with their Twitter content"
+    steps:
+      - action: "follow"
+        platform: "twitter"
+        delay_before: "0"
+        purpose: "Show initial interest"
+
+      - action: "like_tweet"
+        platform: "twitter"
+        delay_before: "1-2 hours"
+        target: "recent_tweets"
+        count: 3
+        purpose: "Engage with their content"
+        notes: "Like their best recent tweets"
+
+# =============================================================================
+# PHASE 2: FIRST VALUE-ADD REPLY (Day 3)
+# Contribute to their conversation
+# =============================================================================
+  - name: "value_reply_1"
+    day: 3
+    description: "Add value to one of their tweets"
+    steps:
+      - action: "reply"
+        platform: "twitter"
+        target: "tweet_with_discussion"  # Find tweet with active replies
+        template: "twitter/replies/value_add"
+        template_vars:
+          type: "insight"
+          add_perspective: true
+          no_self_promotion: true
+        purpose: "Demonstrate expertise and add value"
+        notes: |
+          This is NOT about getting their attention.
+          It's about genuinely contributing to the conversation.
+          Examples:
+          - Share a relevant data point
+          - Offer a unique perspective
+          - Ask a thoughtful question
+
+# =============================================================================
+# PHASE 3: CROSS-PLATFORM FOLLOW (Day 5)
+# Follow on Instagram if they have it
+# =============================================================================
+  - name: "instagram_follow"
+    day: 5
+    description: "Follow on Instagram for cross-platform presence"
+    conditions:
+      - "has_instagram"
+    skip_if_not_met: true
+    steps:
+      - action: "follow"
+        platform: "instagram"
+        delay_before: "0"
+        purpose: "Cross-platform engagement"
+
+      - action: "like_post"
+        platform: "instagram"
+        delay_before: "2-4 hours"
+        count: 2
+        purpose: "Show genuine interest"
+
+# =============================================================================
+# PHASE 4: SECOND VALUE-ADD REPLY (Day 7)
+# Continue building familiarity
+# =============================================================================
+  - name: "value_reply_2"
+    day: 7
+    description: "Another thoughtful contribution"
+    steps:
+      - action: "reply"
+        platform: "twitter"
+        target: "different_tweet"
+        template: "twitter/replies/insight"
+        template_vars:
+          reference_their_work: true
+          add_value: true
+        purpose: "Build recognition"
+        notes: |
+          By now they may recognize your handle.
+          Continue adding value, no pitching.
+
+# =============================================================================
+# PHASE 5: FIRST DM (Day 10)
+# Now you've earned the right to DM
+# =============================================================================
+  - name: "first_dm"
+    day: 10
+    description: "Send thoughtful, value-first DM"
+    steps:
+      - action: "dm"
+        platform: "twitter"
+        template: "twitter/dms/influencer_outreach"
+        template_vars:
+          reference_engagement: true
+          specific_compliment: true
+          value_offer: true
+          low_pressure_cta: true
+        purpose: "Introduce collaboration opportunity"
+        notes: |
+          Key elements:
+          - "I've been following your content on [topic] and..."
+          - Reference a specific tweet/insight of theirs
+          - Offer VALUE first (not ask for something)
+          - Super low-pressure CTA
+
+          Example:
+          "Hey [name]! Been loving your threads on [topic] - especially
+          the point about [specific]. I actually put together a resource
+          on [related topic] that your audience might find useful.
+          Happy to share if you're interested, no strings attached!"
+
+# =============================================================================
+# PHASE 6: EMAIL FOLLOW-UP (Day 17)
+# Professional follow-up via email
+# =============================================================================
+  - name: "email_followup"
+    day: 17
+    description: "Email follow-up with more detail"
+    conditions:
+      - "no_dm_response"
+      - "has_email"
+    steps:
+      - action: "send"
+        platform: "email"
+        template: "email/outreach/warm_intro"
+        template_vars:
+          reference_twitter: true
+          include_portfolio: false
+          specific_collab_idea: true
+        purpose: "More detailed collaboration pitch"
+        notes: |
+          Email allows for more detail.
+          Reference Twitter engagement.
+          Be specific about what you're proposing.
+
+# =============================================================================
+# PHASE 7: FINAL TOUCH (Day 21)
+# Graceful close
+# =============================================================================
+  - name: "graceful_close"
+    day: 21
+    description: "Final touch - leave door open"
+    conditions:
+      - "no_response"
+    steps:
+      - action: "reply"
+        platform: "twitter"
+        target: "any_recent_tweet"
+        template: "twitter/replies/milestone_congrats"
+        template_vars:
+          type: "supportive"
+          genuine: true
+        purpose: "End on positive note"
+        notes: |
+          Don't send another DM.
+          Just continue being supportive publicly.
+          Shows you're not just there for a transaction.
+
+# =============================================================================
+# COMPLETION
+# =============================================================================
+completion:
+  on_response:
+    action: "pause_and_notify"
+    priority: "high"
+    message: "Influencer responded! This is a high-value lead."
+
+  on_no_response:
+    action: "passive_engagement"
+    continue_liking: true
+    retry_after: "60 days"
+    message: "No response. Will continue passive engagement and retry later."
+
+# =============================================================================
+# SCHEDULE
+# =============================================================================
+schedule:
+  days: ["monday", "tuesday", "wednesday", "thursday"]
+  hours:
+    start: "10:00"
+    end: "18:00"
+  timezone: "target"
+
+# =============================================================================
+# EXPECTED TIMELINE
+# =============================================================================
+#
+# Day 1:   Twitter follow + like 3 tweets
+# Day 3:   First value-add reply
+# Day 5:   Instagram follow + likes (if available)
+# Day 7:   Second value-add reply
+# Day 10:  First DM (after 3+ public engagements)
+# Day 17:  Email follow-up (if no response)
+# Day 21:  Supportive public reply (graceful close)
+#
+# Total DMs: 1 (only 1 DM in entire sequence!)
+# Total public engagements: 4-5
+# Total duration: 21 days
+#
+# KEY PRINCIPLES:
+# - VALUE FIRST - give before asking
+# - Public engagement before private
+# - Only 1 DM in entire sequence
+# - Graceful, non-pushy close
+# =============================================================================

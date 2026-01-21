@@ -1,0 +1,1378 @@
+{
+  "$schema": "./manifest.schema.json",
+  "version": "1.1.0",
+  "lastUpdated": "2025-12-23T09:30:21.683Z",
+  "assetsDir": "assets",
+  "totalAssets": 45,
+  "categories": [
+    "article",
+    "other",
+    "design",
+    "storyboard"
+  ],
+  "formats": [
+    "md",
+    "png",
+    "css",
+    "json",
+    "html"
+  ],
+  "assets": [
+    {
+      "id": "59b42efc021f",
+      "path": "articles/agent-experts-claude-code-learning/agent-experts-claude-code-learning.md",
+      "name": "agent-experts-claude-code-learning",
+      "format": "md",
+      "formatType": "document",
+      "category": "article",
+      "subcategory": "agent-experts-claude-code-learning",
+      "size": 35638,
+      "createdAt": "2025-12-23T07:20:12.891Z",
+      "modifiedAt": "2025-12-23T07:20:12.892Z",
+      "tags": [
+        "agent",
+        "experts",
+        "claude",
+        "code",
+        "learning",
+        "learning.md"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "4a24fa177ca1",
+      "path": "articles/agent-experts-claude-code-learning/images/agent-experts-claude-code-learning/comparison.png",
+      "name": "comparison",
+      "format": "png",
+      "formatType": "image",
+      "category": "article",
+      "subcategory": "agent-experts-claude-code-learning",
+      "size": 738520,
+      "createdAt": "2025-12-23T07:20:12.892Z",
+      "modifiedAt": "2025-12-23T07:20:12.894Z",
+      "tags": [
+        "agent",
+        "experts",
+        "claude",
+        "code",
+        "learning"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "eecc793083a8",
+      "path": "articles/agent-experts-claude-code-learning/images/agent-experts-claude-code-learning/hero.png",
+      "name": "hero",
+      "format": "png",
+      "formatType": "image",
+      "category": "article",
+      "subcategory": "agent-experts-claude-code-learning",
+      "size": 621944,
+      "createdAt": "2025-12-23T07:20:12.894Z",
+      "modifiedAt": "2025-12-23T07:20:12.895Z",
+      "tags": [
+        "agent",
+        "experts",
+        "claude",
+        "code",
+        "learning",
+        "hero"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "f6c7dbef4a7c",
+      "path": "articles/agent-experts-claude-code-learning/images/agent-experts-claude-code-learning/workflow.png",
+      "name": "workflow",
+      "format": "png",
+      "formatType": "image",
+      "category": "article",
+      "subcategory": "agent-experts-claude-code-learning",
+      "size": 864174,
+      "createdAt": "2025-12-23T07:20:12.896Z",
+      "modifiedAt": "2025-12-23T07:20:12.897Z",
+      "tags": [
+        "agent",
+        "experts",
+        "claude",
+        "code",
+        "learning"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "60cf1192ccdb",
+      "path": "css/slide-animations.css",
+      "name": "slide-animations",
+      "format": "css",
+      "formatType": "data",
+      "category": "other",
+      "subcategory": null,
+      "size": 5825,
+      "createdAt": "2025-12-23T03:02:36.335Z",
+      "modifiedAt": "2025-12-23T03:02:36.335Z",
+      "tags": [
+        "slide",
+        "animations.css"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "83bf0ecad312",
+      "path": "design-tokens.css",
+      "name": "design-tokens",
+      "format": "css",
+      "formatType": "data",
+      "category": "other",
+      "subcategory": null,
+      "size": 6517,
+      "createdAt": "2025-12-22T17:19:51.089Z",
+      "modifiedAt": "2025-12-23T03:40:50.675Z",
+      "tags": [
+        "design",
+        "tokens.css"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "10ae5160b593",
+      "path": "design-tokens.json",
+      "name": "design-tokens",
+      "format": "json",
+      "formatType": "data",
+      "category": "other",
+      "subcategory": null,
+      "size": 12911,
+      "createdAt": "2025-12-23T03:40:33.598Z",
+      "modifiedAt": "2025-12-23T03:40:33.598Z",
+      "tags": [
+        "design",
+        "tokens.json"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "9acffbbeec7e",
+      "path": "designs/slides/claudekit-branded-pitch-241223.html",
+      "name": "claudekit-branded-pitch-241223",
+      "format": "html",
+      "formatType": "data",
+      "category": "design",
+      "subcategory": "slides",
+      "size": 24873,
+      "createdAt": "2025-12-22T17:22:05.571Z",
+      "modifiedAt": "2025-12-22T17:22:05.571Z",
+      "tags": [
+        "claudekit",
+        "branded",
+        "pitch",
+        "241223.html"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "a4ccc6a0bddc",
+      "path": "designs/slides/claudekit-indie-pitch-251223.html",
+      "name": "claudekit-indie-pitch-251223",
+      "format": "html",
+      "formatType": "data",
+      "category": "design",
+      "subcategory": "slides",
+      "size": 22058,
+      "createdAt": "2025-12-23T03:36:57.741Z",
+      "modifiedAt": "2025-12-23T03:36:57.741Z",
+      "tags": [
+        "claudekit",
+        "indie",
+        "pitch",
+        "251223.html"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "97bbcee52e7a",
+      "path": "designs/slides/claudekit-intro-241223.html",
+      "name": "claudekit-intro-241223",
+      "format": "html",
+      "formatType": "data",
+      "category": "design",
+      "subcategory": "slides",
+      "size": 9318,
+      "createdAt": "2025-12-22T17:08:14.428Z",
+      "modifiedAt": "2025-12-22T17:08:14.429Z",
+      "tags": [
+        "claudekit",
+        "intro",
+        "241223.html"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "8f85aeebb827",
+      "path": "designs/slides/claudekit-layout-demo-251223.html",
+      "name": "claudekit-layout-demo-251223",
+      "format": "html",
+      "formatType": "data",
+      "category": "design",
+      "subcategory": "slides",
+      "size": 20160,
+      "createdAt": "2025-12-23T03:43:42.008Z",
+      "modifiedAt": "2025-12-23T03:43:42.008Z",
+      "tags": [
+        "claudekit",
+        "layout",
+        "demo",
+        "251223.html"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "3766fb951b48",
+      "path": "designs/slides/claudekit-marketing-sales-251223.html",
+      "name": "claudekit-marketing-sales-251223",
+      "format": "html",
+      "formatType": "data",
+      "category": "design",
+      "subcategory": "slides",
+      "size": 34532,
+      "createdAt": "2025-12-22T18:28:19.675Z",
+      "modifiedAt": "2025-12-22T18:28:19.676Z",
+      "tags": [
+        "claudekit",
+        "marketing",
+        "sales",
+        "251223.html"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "511795ea0a6b",
+      "path": "designs/slides/claudekit-pitch-241223.html",
+      "name": "claudekit-pitch-241223",
+      "format": "html",
+      "formatType": "data",
+      "category": "design",
+      "subcategory": "slides",
+      "size": 17068,
+      "createdAt": "2025-12-22T17:14:20.619Z",
+      "modifiedAt": "2025-12-22T17:14:20.619Z",
+      "tags": [
+        "claudekit",
+        "pitch",
+        "241223.html"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "aa9b0b3915a4",
+      "path": "designs/slides/claudekit-pitch-251223.html",
+      "name": "claudekit-pitch-251223",
+      "format": "html",
+      "formatType": "data",
+      "category": "design",
+      "subcategory": "slides",
+      "size": 32617,
+      "createdAt": "2025-12-22T18:03:47.921Z",
+      "modifiedAt": "2025-12-22T18:03:47.921Z",
+      "tags": [
+        "claudekit",
+        "pitch",
+        "251223.html"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "b1a662d25836",
+      "path": "designs/slides/claudekit-premium-251223.html",
+      "name": "claudekit-premium-251223",
+      "format": "html",
+      "formatType": "data",
+      "category": "design",
+      "subcategory": "slides",
+      "size": 33937,
+      "createdAt": "2025-12-23T03:49:02.246Z",
+      "modifiedAt": "2025-12-23T03:49:02.246Z",
+      "tags": [
+        "claudekit",
+        "premium",
+        "251223.html"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "a2177bc2e906",
+      "path": "designs/slides/demo-pitch-251223.html",
+      "name": "demo-pitch-251223",
+      "format": "html",
+      "formatType": "data",
+      "category": "design",
+      "subcategory": "slides",
+      "size": 19805,
+      "createdAt": "2025-12-22T17:58:06.930Z",
+      "modifiedAt": "2025-12-22T17:58:06.930Z",
+      "tags": [
+        "demo",
+        "pitch",
+        "251223.html"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "026c05bcf015",
+      "path": "designs/slides/electric-creative-pitch-241223.html",
+      "name": "electric-creative-pitch-241223",
+      "format": "html",
+      "formatType": "data",
+      "category": "design",
+      "subcategory": "slides",
+      "size": 23251,
+      "createdAt": "2025-12-22T17:32:57.803Z",
+      "modifiedAt": "2025-12-22T17:32:57.803Z",
+      "tags": [
+        "electric",
+        "creative",
+        "pitch",
+        "241223.html"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "a20d4d552228",
+      "path": "designs/slides/test-pitch-251223.html",
+      "name": "test-pitch-251223",
+      "format": "html",
+      "formatType": "data",
+      "category": "design",
+      "subcategory": "slides",
+      "size": 16219,
+      "createdAt": "2025-12-23T03:28:19.048Z",
+      "modifiedAt": "2025-12-23T03:28:19.048Z",
+      "tags": [
+        "test",
+        "pitch",
+        "251223.html"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "77fa8c29d90a",
+      "path": "storyboards/claudekit-marketing-intro/scene-1-end.png",
+      "name": "scene-1-end",
+      "format": "png",
+      "formatType": "image",
+      "category": "storyboard",
+      "subcategory": "claudekit-marketing-intro",
+      "size": 1465877,
+      "createdAt": "2025-12-22T07:29:40.331Z",
+      "modifiedAt": "2025-12-22T07:29:40.337Z",
+      "tags": [
+        "claudekit",
+        "marketing",
+        "intro",
+        "scene",
+        "end.png"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "0ed5a7f805b3",
+      "path": "storyboards/claudekit-marketing-intro/scene-1-start.png",
+      "name": "scene-1-start",
+      "format": "png",
+      "formatType": "image",
+      "category": "storyboard",
+      "subcategory": "claudekit-marketing-intro",
+      "size": 1452267,
+      "createdAt": "2025-12-22T07:29:40.338Z",
+      "modifiedAt": "2025-12-22T07:29:40.341Z",
+      "tags": [
+        "claudekit",
+        "marketing",
+        "intro",
+        "scene",
+        "start.png"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "397ffdb3a6f5",
+      "path": "storyboards/claudekit-marketing-intro/scene-2-end.png",
+      "name": "scene-2-end",
+      "format": "png",
+      "formatType": "image",
+      "category": "storyboard",
+      "subcategory": "claudekit-marketing-intro",
+      "size": 838573,
+      "createdAt": "2025-12-22T07:29:40.344Z",
+      "modifiedAt": "2025-12-22T07:29:40.346Z",
+      "tags": [
+        "claudekit",
+        "marketing",
+        "intro",
+        "scene",
+        "end.png"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "32b36cc95a02",
+      "path": "storyboards/claudekit-marketing-intro/scene-2-start.png",
+      "name": "scene-2-start",
+      "format": "png",
+      "formatType": "image",
+      "category": "storyboard",
+      "subcategory": "claudekit-marketing-intro",
+      "size": 1596052,
+      "createdAt": "2025-12-22T07:29:40.347Z",
+      "modifiedAt": "2025-12-22T07:29:40.351Z",
+      "tags": [
+        "claudekit",
+        "marketing",
+        "intro",
+        "scene",
+        "start.png"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "526b836ffda2",
+      "path": "storyboards/claudekit-marketing-intro/scene-3-end.png",
+      "name": "scene-3-end",
+      "format": "png",
+      "formatType": "image",
+      "category": "storyboard",
+      "subcategory": "claudekit-marketing-intro",
+      "size": 835272,
+      "createdAt": "2025-12-22T07:29:40.353Z",
+      "modifiedAt": "2025-12-22T07:29:40.357Z",
+      "tags": [
+        "claudekit",
+        "marketing",
+        "intro",
+        "scene",
+        "end.png"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "44965f355124",
+      "path": "storyboards/claudekit-marketing-intro/scene-3-start.png",
+      "name": "scene-3-start",
+      "format": "png",
+      "formatType": "image",
+      "category": "storyboard",
+      "subcategory": "claudekit-marketing-intro",
+      "size": 1814733,
+      "createdAt": "2025-12-22T07:29:40.358Z",
+      "modifiedAt": "2025-12-22T07:29:40.366Z",
+      "tags": [
+        "claudekit",
+        "marketing",
+        "intro",
+        "scene",
+        "start.png"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "f177bda67dbe",
+      "path": "storyboards/claudekit-marketing-intro/scene-4-end.png",
+      "name": "scene-4-end",
+      "format": "png",
+      "formatType": "image",
+      "category": "storyboard",
+      "subcategory": "claudekit-marketing-intro",
+      "size": 787033,
+      "createdAt": "2025-12-22T07:29:40.369Z",
+      "modifiedAt": "2025-12-22T07:29:40.373Z",
+      "tags": [
+        "claudekit",
+        "marketing",
+        "intro",
+        "scene",
+        "end.png"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "98a20770a17c",
+      "path": "storyboards/claudekit-marketing-intro/scene-4-start.png",
+      "name": "scene-4-start",
+      "format": "png",
+      "formatType": "image",
+      "category": "storyboard",
+      "subcategory": "claudekit-marketing-intro",
+      "size": 1718895,
+      "createdAt": "2025-12-22T07:29:40.374Z",
+      "modifiedAt": "2025-12-22T07:29:40.377Z",
+      "tags": [
+        "claudekit",
+        "marketing",
+        "intro",
+        "scene",
+        "start.png"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "df35d031d159",
+      "path": "storyboards/claudekit-marketing-intro/storyboard.json",
+      "name": "storyboard",
+      "format": "json",
+      "formatType": "data",
+      "category": "storyboard",
+      "subcategory": "claudekit-marketing-intro",
+      "size": 11841,
+      "createdAt": "2025-12-22T07:29:40.378Z",
+      "modifiedAt": "2025-12-22T07:29:40.379Z",
+      "tags": [
+        "claudekit",
+        "marketing",
+        "intro"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "fba08df31dc2",
+      "path": "storyboards/claudekit-marketing-intro/storyboard.md",
+      "name": "storyboard",
+      "format": "md",
+      "formatType": "document",
+      "category": "storyboard",
+      "subcategory": "claudekit-marketing-intro",
+      "size": 11822,
+      "createdAt": "2025-12-22T07:29:40.379Z",
+      "modifiedAt": "2025-12-22T07:29:40.379Z",
+      "tags": [
+        "claudekit",
+        "marketing",
+        "intro"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "abb429fbe782",
+      "path": "storyboards/claudekit-overview-explainer/scene-1-end.png",
+      "name": "scene-1-end",
+      "format": "png",
+      "formatType": "image",
+      "category": "storyboard",
+      "subcategory": "claudekit-overview-explainer",
+      "size": 1131420,
+      "createdAt": "2025-12-22T07:29:40.379Z",
+      "modifiedAt": "2025-12-22T07:29:40.382Z",
+      "tags": [
+        "claudekit",
+        "overview",
+        "explainer",
+        "scene",
+        "end.png"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "b842d2613a98",
+      "path": "storyboards/claudekit-overview-explainer/scene-1-start.png",
+      "name": "scene-1-start",
+      "format": "png",
+      "formatType": "image",
+      "category": "storyboard",
+      "subcategory": "claudekit-overview-explainer",
+      "size": 1057797,
+      "createdAt": "2025-12-22T07:29:40.383Z",
+      "modifiedAt": "2025-12-22T07:29:40.385Z",
+      "tags": [
+        "claudekit",
+        "overview",
+        "explainer",
+        "scene",
+        "start.png"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "48c452863297",
+      "path": "storyboards/claudekit-overview-explainer/scene-2-end.png",
+      "name": "scene-2-end",
+      "format": "png",
+      "formatType": "image",
+      "category": "storyboard",
+      "subcategory": "claudekit-overview-explainer",
+      "size": 1342054,
+      "createdAt": "2025-12-22T07:29:40.386Z",
+      "modifiedAt": "2025-12-22T07:29:40.388Z",
+      "tags": [
+        "claudekit",
+        "overview",
+        "explainer",
+        "scene",
+        "end.png"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "0ecec70a30f4",
+      "path": "storyboards/claudekit-overview-explainer/scene-2-start.png",
+      "name": "scene-2-start",
+      "format": "png",
+      "formatType": "image",
+      "category": "storyboard",
+      "subcategory": "claudekit-overview-explainer",
+      "size": 1405184,
+      "createdAt": "2025-12-22T07:29:40.390Z",
+      "modifiedAt": "2025-12-22T07:29:40.394Z",
+      "tags": [
+        "claudekit",
+        "overview",
+        "explainer",
+        "scene",
+        "start.png"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "0990e727aadd",
+      "path": "storyboards/claudekit-overview-explainer/scene-3-end.png",
+      "name": "scene-3-end",
+      "format": "png",
+      "formatType": "image",
+      "category": "storyboard",
+      "subcategory": "claudekit-overview-explainer",
+      "size": 1308241,
+      "createdAt": "2025-12-22T07:29:40.395Z",
+      "modifiedAt": "2025-12-22T07:29:40.397Z",
+      "tags": [
+        "claudekit",
+        "overview",
+        "explainer",
+        "scene",
+        "end.png"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "26e46ea7efca",
+      "path": "storyboards/claudekit-overview-explainer/scene-3-start.png",
+      "name": "scene-3-start",
+      "format": "png",
+      "formatType": "image",
+      "category": "storyboard",
+      "subcategory": "claudekit-overview-explainer",
+      "size": 975171,
+      "createdAt": "2025-12-22T07:29:40.404Z",
+      "modifiedAt": "2025-12-22T07:29:40.405Z",
+      "tags": [
+        "claudekit",
+        "overview",
+        "explainer",
+        "scene",
+        "start.png"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "c33fdb446928",
+      "path": "storyboards/claudekit-overview-explainer/scene-4-end.png",
+      "name": "scene-4-end",
+      "format": "png",
+      "formatType": "image",
+      "category": "storyboard",
+      "subcategory": "claudekit-overview-explainer",
+      "size": 1156482,
+      "createdAt": "2025-12-22T07:29:40.429Z",
+      "modifiedAt": "2025-12-22T07:29:40.431Z",
+      "tags": [
+        "claudekit",
+        "overview",
+        "explainer",
+        "scene",
+        "end.png"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "1a7c1a9301db",
+      "path": "storyboards/claudekit-overview-explainer/scene-4-start.png",
+      "name": "scene-4-start",
+      "format": "png",
+      "formatType": "image",
+      "category": "storyboard",
+      "subcategory": "claudekit-overview-explainer",
+      "size": 1289709,
+      "createdAt": "2025-12-22T07:29:40.434Z",
+      "modifiedAt": "2025-12-22T07:29:40.436Z",
+      "tags": [
+        "claudekit",
+        "overview",
+        "explainer",
+        "scene",
+        "start.png"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "22ccac5bbc9a",
+      "path": "storyboards/claudekit-overview-explainer/storyboard.json",
+      "name": "storyboard",
+      "format": "json",
+      "formatType": "data",
+      "category": "storyboard",
+      "subcategory": "claudekit-overview-explainer",
+      "size": 10071,
+      "createdAt": "2025-12-22T07:29:40.439Z",
+      "modifiedAt": "2025-12-22T07:29:40.439Z",
+      "tags": [
+        "claudekit",
+        "overview",
+        "explainer"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "69277f68138b",
+      "path": "storyboards/claudekit-overview-explainer/storyboard.md",
+      "name": "storyboard",
+      "format": "md",
+      "formatType": "document",
+      "category": "storyboard",
+      "subcategory": "claudekit-overview-explainer",
+      "size": 9971,
+      "createdAt": "2025-12-22T07:29:40.439Z",
+      "modifiedAt": "2025-12-22T07:29:40.439Z",
+      "tags": [
+        "claudekit",
+        "overview",
+        "explainer"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "14573abd6e37",
+      "path": "storyboards/storyboard-red-alert/frame-01.png",
+      "name": "frame-01",
+      "format": "png",
+      "formatType": "image",
+      "category": "storyboard",
+      "subcategory": "storyboard-red-alert",
+      "size": 1390527,
+      "createdAt": "2025-12-22T07:29:40.439Z",
+      "modifiedAt": "2025-12-22T07:29:40.443Z",
+      "tags": [
+        "storyboard",
+        "red",
+        "alert",
+        "frame",
+        "01.png"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "e0fd9fd47500",
+      "path": "storyboards/storyboard-red-alert/frame-02.png",
+      "name": "frame-02",
+      "format": "png",
+      "formatType": "image",
+      "category": "storyboard",
+      "subcategory": "storyboard-red-alert",
+      "size": 1343019,
+      "createdAt": "2025-12-22T07:29:40.444Z",
+      "modifiedAt": "2025-12-22T07:29:40.447Z",
+      "tags": [
+        "storyboard",
+        "red",
+        "alert",
+        "frame",
+        "02.png"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "f063d95f9518",
+      "path": "storyboards/storyboard-red-alert/frame-03.png",
+      "name": "frame-03",
+      "format": "png",
+      "formatType": "image",
+      "category": "storyboard",
+      "subcategory": "storyboard-red-alert",
+      "size": 1339715,
+      "createdAt": "2025-12-22T07:29:40.449Z",
+      "modifiedAt": "2025-12-22T07:29:40.455Z",
+      "tags": [
+        "storyboard",
+        "red",
+        "alert",
+        "frame",
+        "03.png"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "694e667177f1",
+      "path": "storyboards/storyboard-red-alert/frame-04.png",
+      "name": "frame-04",
+      "format": "png",
+      "formatType": "image",
+      "category": "storyboard",
+      "subcategory": "storyboard-red-alert",
+      "size": 1460615,
+      "createdAt": "2025-12-22T07:29:40.456Z",
+      "modifiedAt": "2025-12-22T07:29:40.462Z",
+      "tags": [
+        "storyboard",
+        "red",
+        "alert",
+        "frame",
+        "04.png"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "c186402b701f",
+      "path": "storyboards/storyboard-red-alert/storyboard.md",
+      "name": "storyboard",
+      "format": "md",
+      "formatType": "document",
+      "category": "storyboard",
+      "subcategory": "storyboard-red-alert",
+      "size": 1904,
+      "createdAt": "2025-12-22T07:29:40.463Z",
+      "modifiedAt": "2025-12-22T07:29:40.463Z",
+      "tags": [
+        "storyboard",
+        "red",
+        "alert"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "eef21e9ebcac",
+      "path": "transcripts/agent-experts-indydevdan.md",
+      "name": "agent-experts-indydevdan",
+      "format": "md",
+      "formatType": "document",
+      "category": "other",
+      "subcategory": null,
+      "size": 20657,
+      "createdAt": "2025-12-22T07:29:40.463Z",
+      "modifiedAt": "2025-12-22T07:29:40.463Z",
+      "tags": [
+        "agent",
+        "experts",
+        "indydevdan.md"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    },
+    {
+      "id": "53df3f9996e6",
+      "path": "writing-styles/default.md",
+      "name": "default",
+      "format": "md",
+      "formatType": "document",
+      "category": "other",
+      "subcategory": null,
+      "size": 17977,
+      "createdAt": "2025-12-22T07:29:40.464Z",
+      "modifiedAt": "2025-12-22T07:29:40.464Z",
+      "tags": [
+        "writing",
+        "styles"
+      ],
+      "r2": {
+        "bucket": null,
+        "key": null,
+        "url": null,
+        "syncedAt": null,
+        "status": "local"
+      },
+      "meta": {
+        "description": null,
+        "campaign": null,
+        "aiGenerated": false
+      }
+    }
+  ]
+}

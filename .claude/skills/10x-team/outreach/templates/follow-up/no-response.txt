@@ -1,0 +1,15 @@
+---
+subject: Checking in - did you get my email?
+---
+Hi {{ first_name }},
+
+I hope this message finds you well. I reached out a while back but haven't heard from you yet.
+
+{{ custom_message }}
+
+I completely understand if now isn't the right time. Just let me know either way so I can update my records.
+
+Thanks for your time!
+
+Best regards,
+{{ my_name }}

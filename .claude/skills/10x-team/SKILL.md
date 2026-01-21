@@ -161,6 +161,113 @@ INSTAGRAM_FOLLOWS_PER_DAY=30
 | `creativity` | Design ideas | `canva/canva-*` | Creates in Canva |
 | `frontend-design` | UI mockups | `landing-page/*` | Generates full code |
 
+## Folder Mapping
+
+All modules use standardized folder structure for inputs, outputs, and resources:
+
+### Root-Level Folders
+
+| Folder | Purpose | Used By |
+|--------|---------|---------|
+| `input/` | Input files for processing | Canva file editors, workflow engine |
+| `output/` | Generated outputs | All modules |
+| `output/workflows/` | Saved workflow JSONs | Outreach module |
+| `output/canva/` | Canva exports | Canva module |
+| `output/discoveries/` | Discovery results | Outreach discovery |
+| `projects/` | Landing page projects | Landing page module |
+| `projects/{name}/` | Individual project | Landing page agents |
+| `credentials/` | OAuth tokens, API keys | Gmail, Canva adapters |
+| `user-preferences/` | User configs, saved settings | All modules |
+| `assets/` | Marketing assets | Brand, design skills |
+| `campaigns/` | Campaign definitions | Campaign workflows |
+| `canvas/` | TLDraw visual workflow app | Outreach canvas |
+
+### Skill-Internal Folders
+
+| Path | Purpose |
+|------|---------|
+| `outreach/templates/` | 85+ message templates (LinkedIn, Twitter, Instagram, Email) |
+| `outreach/templates/linkedin/` | LinkedIn connection, message, InMail templates |
+| `outreach/templates/twitter/` | Twitter DM, reply, tweet templates |
+| `outreach/templates/instagram/` | Instagram DM, comment, story templates |
+| `outreach/templates/email/` | Email outreach, follow-up, newsletter templates |
+| `outreach/workflows/examples/` | Pre-built workflow sequences (B2B, Influencer, Investor) |
+| `outreach/scripts/` | Python automation scripts |
+| `canva/scripts/` | Canva API client and utilities |
+| `canva/scripts/local/` | Local file editors (PDF, PPTX, DOCX, XLSX) |
+| `landing-page/agents/` | 7 specialist agent definitions |
+| `landing-page/knowledge/` | 9 reference docs (headlines, colors, typography, etc.) |
+| `landing-page/scripts/` | Generator scripts for 5 tech stacks |
+
+### Output Paths by Module
+
+**Outreach Module:**
+```
+output/
+├── workflows/           # Saved workflow JSONs
+│   └── {name}.json
+├── discoveries/         # Discovery results
+│   └── {date}-{query}.json
+├── campaigns/           # Campaign execution logs
+│   └── {name}/
+└── reports/             # Outreach reports
+    └── {date}-{type}.md
+```
+
+**Canva Module:**
+```
+output/
+├── canva/              # Canva exports
+│   ├── exports/        # Exported designs (PNG, PDF, etc.)
+│   └── working/        # Working copies for file editing
+└── files/              # Edited local files
+    └── {original-name}/
+```
+
+**Landing Page Module:**
+```
+projects/
+└── {project-name}/
+    ├── requirements/   # Phase 1: Discovery output
+    │   └── brief.json
+    ├── copy/           # Phase 2: Copywriting output
+    │   ├── headlines.md
+    │   └── page-copy.md
+    ├── design/         # Phase 3: Design output
+    │   ├── strategy.md
+    │   ├── colors.json
+    │   └── typography.json
+    ├── build/          # Phase 4: Generated code
+    │   └── {tech-stack-specific}
+    ├── testing/        # Phase 5: QA output
+    │   └── test-kit.md
+    ├── launch/         # Phase 6: Launch output
+    │   ├── checklist.md
+    │   └── maintenance.md
+    └── status.json     # Project status tracking
+```
+
+### Samples & References
+
+| Folder | Contains |
+|--------|----------|
+| `assets/writing-styles/` | User writing style samples |
+| `docs/brand-guidelines.md` | User brand guidelines |
+| `campaigns/` | Campaign configuration files |
+| `guide/` | User guides and documentation |
+
+### File Safety
+
+**Input Protection:**
+- Original files in `input/` are NEVER modified
+- All edits work on copies in `output/working/`
+- Final results saved to `output/`
+
+**Credential Security:**
+- OAuth tokens stored in `credentials/`
+- Never committed to git (in .gitignore)
+- Encrypted where possible
+
 ## Best Practices
 
 1. Always warm up accounts before bulk outreach
@@ -169,3 +276,5 @@ INSTAGRAM_FOLLOWS_PER_DAY=30
 4. Use templates as starting points, personalize
 5. Test landing pages on all devices
 6. Original files never modified (copies only)
+7. Keep credentials in `credentials/` folder
+8. Use `input/` for source files, `output/` for results
